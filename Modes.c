@@ -1365,7 +1365,7 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlVal(GiPopupAdd2,PANEL_ADD_CHECKCONTINUOUS, 	0);
 			//SetCtrlVal(GiPopupAdd2,PANEL_ADD_NUMBER,			0);
 			SetCtrlVal(GiPopupAdd2,PANEL_ADD_INTERFRAME,		"");
-			SetCtrlVal(GiPopupAdd2,PANEL_ADD_WUID,				8);  //MODIF Maxime PAGES - 15/06/2020   E104
+		//	SetCtrlVal(GiPopupAdd2,PANEL_ADD_WUID,				8);  //MODIF Maxime PAGES - 15/06/2020   E104
 			SetCtrlVal(GiPopupAdd2,PANEL_ADD_LABEL_STRING,		"");
 			SetCtrlVal(GiPopupAdd2,PANEL_ADD_TIME2,				"");
 			SetCtrlVal(GiPopupAdd2,PANEL_ADD_DURATION2,			"");
@@ -3011,6 +3011,21 @@ void modifyStep(int rowNb)
 	char sCellValue[200]="";
 	int sCellValue2=0;
 
+	//***********************************************TEST**********************
+	char stringNbframe[50] = ""; //MODIF Maxime PAGES 11/06/2020
+
+
+			for (int i=1; i<256; i++)
+			{
+				sprintf(stringNbframe, "%d",i);  // on convertir le int en string
+				InsertListItem (GiPopupAdd2,PANEL_ADD_LFDNBFRAME,i,stringNbframe,stringNbframe);
+			}
+	
+	
+	  //**********************************************
+	
+	
+	
 	panelHandle = LoadPanel(0, "IhmModes.uir",PANEL_ADD);
 	SetCtrlAttribute(panelHandle-2,PANEL_ADD_FUNCTION_SELECT,ATTR_DIMMED,1);
 	cell.x=3;
@@ -3778,7 +3793,7 @@ int CVICALLBACK wuid_fonction (int panel, int control, int event,
 			else
 			{
 				sprintf(range,"P%d",itemValue+1);
-				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, valueParameter);
+				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, valueParameter); //ligne peut être réutilisable pour récupérer l'ID, faire un if ID1 =0 ID1Diag = 1 ... ID2 = 3 et utiliser cette ligne pour récupérer la valeur !
 				SetCtrlVal(panel,PANEL_ADD_WUID_VALUE,valueParameter);
 			}
 			break;
