@@ -247,6 +247,7 @@
 #define  PANEL_MODE_START_ENABLE2         96      /* control type: color, callback function: (none) */
 #define  PANEL_MODE_TEXTBOX_ANALYSIS      97      /* control type: textBox, callback function: (none) */
 #define  PANEL_MODE_QUITBUTTON            98      /* control type: command, callback function: redCross */
+#define  PANEL_MODE_COMMANDBUTTON         99      /* control type: command, callback function: InitConfig */
 
 #define  PANEL_STAT                       4
 #define  PANEL_STAT_DECORATION            2       /* control type: deco, callback function: (none) */
@@ -305,8 +306,8 @@
 #define  GST_RUN_MAIN_DELETE              5
 #define  GST_RUN_MAIN_DELETEALL           6
 #define  GST_RUN_MAIN_SEPARATOR           7
-#define  GST_RUN_MAIN_MOVE_DOWN           8
-#define  GST_RUN_MAIN_MOVE_UP             9
+#define  GST_RUN_MAIN_MOVE_UP             8
+#define  GST_RUN_MAIN_MOVE_DOWN           9
 #define  GST_RUN_MAIN_SELECT              10
 #define  GST_RUN_MAIN_SEPARATOR_2         11
 #define  GST_RUN_MAIN_LOADSEQ             12
@@ -342,14 +343,15 @@
 #define  MENUEXP_MAIN                     2
 #define  MENUEXP_MAIN_ADD                 3
 #define  MENUEXP_MAIN_INSERT              4
-#define  MENUEXP_MAIN_SEPARATOR_3         5
-#define  MENUEXP_MAIN_MOVEUP              6
-#define  MENUEXP_MAIN_MOVEDOWN            7
-#define  MENUEXP_MAIN_SEPARATOR           8
-#define  MENUEXP_MAIN_DELETE              9
-#define  MENUEXP_MAIN_DELETEALL           10
-#define  MENUEXP_MAIN_SEPARATOR_2         11
-#define  MENUEXP_MAIN_LOADEXPECTED        12
+#define  MENUEXP_MAIN_MODIFY              5
+#define  MENUEXP_MAIN_SEPARATOR_3         6
+#define  MENUEXP_MAIN_MOVEUP              7
+#define  MENUEXP_MAIN_MOVEDOWN            8
+#define  MENUEXP_MAIN_SEPARATOR           9
+#define  MENUEXP_MAIN_DELETE              10
+#define  MENUEXP_MAIN_DELETEALL           11
+#define  MENUEXP_MAIN_SEPARATOR_2         12
+#define  MENUEXP_MAIN_LOADEXPECTED        13
 
 
      /* Callback Prototypes: */
@@ -436,6 +438,7 @@ int  CVICALLBACK GstOptAddOk(int panel, int control, int event, void *callbackDa
 int  CVICALLBACK GstTablePression(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK GstTableRun(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK GstTableVitesse(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
+int  CVICALLBACK InitConfig(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK insert1(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK insert1bis(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);
 int  CVICALLBACK insert2(int panel, int control, int event, void *callbackData, int eventData1, int eventData2);

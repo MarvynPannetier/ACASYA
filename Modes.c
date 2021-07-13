@@ -221,7 +221,7 @@ int Valonevalue = 0;
 int Valrangevalue = 0;
 int event_sequence = 0;
 
-//*********************MARVYN 15/06/2021***********
+//***************MARVYN 15/06/2021****************
 // counter to load initial files
 int count_anum = 0;
 int count_database = 0;
@@ -232,6 +232,15 @@ int modifySteps = 0;
 int numRow = 0 ;
 int tableHeight = 0 ;
 int command = 0;
+int commandExpResult = 0;
+int addChoice = 0;
+int numLabel = 0;
+int FirstRF = 0;
+double Tend = 0 ;
+int TwoLabs= 0;
+int FirstLab= 0;
+char *chaine;
+//************************************************
 
 
 
@@ -269,7 +278,7 @@ char tabSWIdentWUID[2][25] = {"",""};
 
 
 //Modif MaximePAGES 18/08/2020 
-struct Frame myFrameTab[100] = {NULL};
+struct Frame myFrameTab[100] = {""};
 
 //MOdif MaximePAGES 27/08/2020  
 int ongoingAnalyse = 0;
@@ -396,7 +405,7 @@ static worksheetHandle5 	= 0;
 static workbookHandle6 		= 0;
 //static CAObjHandle applicationHandle6 = 0;
 //static applicationHandle6 	= 0;
-static worksheetHandle6 	= 0;
+
 //
 //static CAObjHandle applicationHandle7 	= 0;
 static workbookHandle7 		= 0;
@@ -918,10 +927,6 @@ void ModeInitSafeVar(void)
 int CVICALLBACK ValueTxt_Callback (int panel, int control, int event, void *callbackData, int eventData1, int eventData2)
 {
 	
-	int  boucle=0, end=1;
-	char range[30]="";
-	char cond_end[100]="";
-	char ParameterName[100]="";
 	int itemValue =0;
 	
 	if (event == EVENT_LEFT_CLICK)
@@ -1203,8 +1208,9 @@ int CVICALLBACK quitCallback (int panel, int control, int event,
 	switch (event)
 	{
 		case EVENT_COMMIT:
+			couleurSelection(numRow,PANEL_MODE_SCRIPTS_DETAILS,GiPanel,VAL_WHITE); 
 			HidePanel(GiPopupAdd2);
-
+		//	couleurSelection(numRow,PANEL_MODE_SCRIPTS_DETAILS, panel,VAL_WHITE )  ;
 			//ExcelRpt_WorkbookClose (workbookHandledata, 0);
 			//ExcelRpt_ApplicationQuit (applicationHandledata);
 			//CA_DiscardObjHandle(applicationHandledata);
@@ -1625,9 +1631,12 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 {
 	//int toggleButtonVal=0;
 	//int lfdNameVal=0;
-
+	Point cell;
+	cell.x=1;
+	
+	
 	char nameMLF[100]="";
-
+	
 
 	/*char wuid1[100]="ID1";
 	char wuid2[100]="IDDIAG";
@@ -1636,7 +1645,7 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 	char wuid5[100]="ID5";
 	char wuid6[100]="ID6"; */
 	//int iwuid=0;
-	char value_ind[100] = "";
+	
 
 	char pressure[100] = "";
 	char pressure2[100]	="";
@@ -1686,11 +1695,11 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 	char mlf2[]="MLF2";
 	char mlf3[]="MLF3";*/
 
-	Point cell;
-
 	switch (event)
 	{
 		case EVENT_COMMIT:
+			
+			 
 			//MARVYN 23/06/2021
 			couleurSelection(numRow,PANEL_MODE_SCRIPTS_DETAILS,GiPanel,VAL_WHITE);
 			//**********
@@ -1699,10 +1708,9 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 			if(insertSteps == 0 && modifySteps == 0)
 			{
 			InsertTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, -1, 1, VAL_USE_MASTER_CELL_TYPE);
-			*pointeurval= *pointeurval+1;// printf("premier if \n");
+			*pointeurval= *pointeurval+1;
+			//printf("premier if \n");
 			cell.y=*pointeurval;
-			
-			//*pointeurval= *pointeurval+1;
 			}
 			else if (insertSteps ==1)
 			{
@@ -1710,27 +1718,27 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 				if ( numRow != 0 )
 				{
 				InsertTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, numRow, 1, VAL_USE_MASTER_CELL_TYPE);
-			
-				cell.y = numRow ;
 				*pointeurval= *pointeurval+1;
+				cell.y = numRow ;
+				
 				}
 				else 
 				{
 				InsertTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, -1, 1, VAL_USE_MASTER_CELL_TYPE);
-		
+				*pointeurval= *pointeurval+1; 
 				cell.y=*pointeurval;
-				*pointeurval= *pointeurval+1;
+			
 				}
 			}
 			else if (modifySteps == 1)
 			{
 				
 			cell.y = numRow ; 
-			InsertTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, numRow, 1, VAL_USE_MASTER_CELL_TYPE);
-			DeleteTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, numRow+1, tableHeight);
+		//	InsertTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, numRow, 1, VAL_USE_MASTER_CELL_TYPE);
+		//	DeleteTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, numRow+1, tableHeight);
 			itemValue= command ;
 			}
-			
+			else cell.y =1;
 
 			// Affiche des paramètre depuis le panel d'ajout vers le tableau
 			
@@ -1796,7 +1804,7 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 					}
 					else
 					{
-						printf("\nTest %s \n", valueNbLF);
+						
 						SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, valueNbLF);
 					}
 
@@ -1889,6 +1897,9 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 
 					cell.x=3;
 					GetCtrlVal(panel,PANEL_ADD_LABEL_STRING, labelname);
+				//	labelTab[numLabel] = labelname ; 
+					//printf("label[i] = %s\n",labelTab[i]);
+				//	numLabel++;
 					sprintf(labelname2,"%s",labelname);
 					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, labelname2);
 
@@ -1916,8 +1927,14 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 				SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, condition3);
 			}
 
+			if (modifySteps != 1)
+			{
 			couleurLigne(*pointeurval, GiPanel);
-
+			}
+			else 
+			{
+			couleurLigne(numRow, GiPanel);	
+			}
 
 			// WU ID
 			/*cell.x=6;
@@ -1936,14 +1953,9 @@ int CVICALLBACK parametersCallback (int panel, int control, int event,
 									void *callbackData, int eventData1, int eventData2)
 {
 	int itemValue=0;
-	char range[30];
 	char valueParameter[100];
 	char unitParameter[100];
-	char Param[500]="";
-	char sValue[500]="";
 	char Formula[500]="";
-	int iValue=0;
-	int ListIndex=0;
 
 	switch (event)
 	{
@@ -2701,13 +2713,16 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 							{
 							//DeleteTableRows (panelHandle, tableCtrl, index, numToDelete); //Programming with Table Controls
 							DeleteTableRows (panel, PANEL_MODE_SCRIPTS_DETAILS, rect.top, rect.height);
+							*pointeurval= *pointeurval-1;
 							}
+							 
 							return 0;
 						}
-						if(*pointeurval > 0)
+					/*	if(*pointeurval > 0)
 						{
 							*pointeurval= *pointeurval-1;  // Retire 1 au compteur de ligne du tableau
-						}
+						}   */
+					
 						break;
 
 					case GST_SCRIPT_MAIN_DELETEALL:
@@ -2723,6 +2738,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 								*pointeurval=0;	// remet a 0 le compteur de ligne du tableau
 							}
 						}
+					
 						break;
 
 					case GST_SCRIPT_MAIN_ADD:
@@ -2744,7 +2760,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 						InstallCtrlCallback (GiPopupAdd2, PANEL_ADD_LFPOWER, LFPowerTxt_Callback, 0);
 						
 						//********************************************
-						
+					
 						break;
 					//MARVYN 22/06/2021
 					case GST_SCRIPT_MAIN_INSERT:
@@ -2768,6 +2784,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 						InstallCtrlCallback (GiPopupAdd2, PANEL_ADD_ACCELERATION, AccTxt_Callback, 0);  
 						InstallCtrlCallback (GiPopupAdd2, PANEL_ADD_INTERFRAME, InterframeTxt_Callback, 0);
 						InstallCtrlCallback (GiPopupAdd2, PANEL_ADD_LFPOWER, LFPowerTxt_Callback, 0);	
+				
 						
 					break;
 
@@ -2781,6 +2798,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 						tableHeight = rect.height ;
 						modifySteps =1;
 						insertSteps = 0; 
+						couleurSelection(numRow,PANEL_MODE_SCRIPTS_DETAILS, panel,VAL_LT_GRAY )  ;
 						add_menu();
 						modifyStep(numRow);
 						
@@ -2792,7 +2810,9 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 						InstallCtrlCallback (GiPopupAdd2, PANEL_ADD_ACCELERATION, AccTxt_Callback, 0);  
 						InstallCtrlCallback (GiPopupAdd2, PANEL_ADD_INTERFRAME, InterframeTxt_Callback, 0);
 						InstallCtrlCallback (GiPopupAdd2, PANEL_ADD_LFPOWER, LFPowerTxt_Callback, 0);
-					break;
+				
+						
+						break;
 					
 					
 					 //MODIF MARVYN 18/06/2021
@@ -2804,7 +2824,20 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 						ExcelRpt_WorkbookOpen (applicationHandleProject, pathName, &workbookHandleLoad);
 						ExcelRpt_GetWorksheetFromIndex(workbookHandleLoad, 2, &worksheetHandleLoad);
 						ExcelRpt_GetCellValue (worksheetHandleLoad, "I1", CAVT_INT,&EndBoucle);
-
+						
+						//***********************MARVYN 29/06/2021******************************
+						//printf("pathname = %d\n",pathName[strlen(pathName)-1]);
+						
+						if ( pathName[strlen(pathName)-1] != 25 && pathName[strlen(pathName)-1] != 8 ) 
+						{
+						DeleteTableRows (panel, PANEL_MODE_SCRIPTS_DETAILS, 1, -1);
+						*pointeurval=0;	// remet a 0 le compteur de ligne du tableau
+					
+						DeleteTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, 1, -1);
+						*PointeurNbRowsExpR=0;	// remet a 0 le compteur de ligne du tableau
+										  
+						
+						
 						*PointeurNbRowsExpR= EndBoucle-1;
 
 						// charge chaque lignes du tableau
@@ -2885,11 +2918,14 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 							ExcelRpt_GetCellValue (worksheetHandle7,range , CAVT_CSTRING,sCellValue);
 							SetTableCellVal(panel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
 
+							
+						
 							cell.x =3;  //Function
 							sprintf(range,"C%d",boucle+1);
 							ExcelRpt_GetCellValue (worksheetHandle7,range , CAVT_CSTRING,sCellValue);
 							SetTableCellVal(panel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
-
+							
+						
 							cell.x =4;  //Value
 							sprintf(range,"D%d",boucle+1);
 							ExcelRpt_GetCellValue (worksheetHandle7,range , CAVT_CSTRING,sCellValue);
@@ -2922,12 +2958,12 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 						sprintf(range,"A%d",boucle+1);
 						ExcelRpt_GetCellValue (worksheetHandle3, range, CAVT_INT,&iCellValue);
 						SetCtrlVal(panel,PANEL_MODE_ENDTIME,iCellValue); */
-
+						}
 						ExcelRpt_WorkbookClose (workbookHandle7, 0);
 						//ExcelRpt_ApplicationQuit (applicationHandle7);
 						//CA_DiscardObjHandle(applicationHandle7);
-
-
+						
+					
 						break;
 
 					case GST_SCRIPT_MAIN_MOVE_UP:
@@ -2957,7 +2993,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 							couleurLigne(numeroLigne-1, panel);
 
 						}
-
+						
 						break;
 
 					case GST_SCRIPT_MAIN_MOVE_DOWN:
@@ -2985,7 +3021,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 							couleurLigne(numeroLigne+1, panel);
 
 						}
-
+						
 						break;
 				}
 
@@ -2993,7 +3029,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 			break;
 
 	}
-
+	
 	return 0;
 }
 
@@ -3006,13 +3042,10 @@ void modifyStep(int rowNb)
 {
 	Point cell;
 	int panelHandle = 0;
-	int panelHandle2;
-	int panelHandle3;
 	char sCellValue[200]="";
-	int sCellValue2=0;
 
-	//***********************************************TEST**********************
-	char stringNbframe[50] = ""; //MODIF Maxime PAGES 11/06/2020
+	//***********************************************MARVYN**********************
+	char stringNbframe[50] = ""; 
 
 
 			for (int i=1; i<256; i++)
@@ -3056,6 +3089,7 @@ void modifyStep(int rowNb)
 	    SetCtrlVal(panelHandle-2,PANEL_ADD_DURATION2,sCellValue); 
 		cell.x = 4 ;
 		GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-2]=NULL ;
 	    SetCtrlVal(panelHandle-2,PANEL_ADD_ACCELERATION,sCellValue); 
 		command = 1;
 				 
@@ -3070,7 +3104,7 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,				ATTR_DIMMED,0); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,				ATTR_DIMMED,0);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,			ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,				ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,					ATTR_DIMMED,0);
@@ -3093,8 +3127,7 @@ void modifyStep(int rowNb)
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_INTERFRAME,sCellValue); 
 			cell.x = 6 ;
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
-			printf("atoi = %d",sCellValue);
-		    SetCtrlVal(panelHandle-2,PANEL_ADD_WUID,8);
+		    SetCtrlVal(panelHandle-2,PANEL_ADD_WUID,10);
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_LFPOWER,"20"); 
 			command = 3;
 				 
@@ -3125,6 +3158,7 @@ void modifyStep(int rowNb)
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_DURATION2,sCellValue); 
 			cell.x = 4 ;
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
+			sCellValue[strlen(sCellValue)-2]=NULL ;  
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_PRESSURE,sCellValue); 
 			command = 2;
 			     
@@ -3264,14 +3298,687 @@ void modifyStep(int rowNb)
 			
 }
 
+//MARVYN 28/06/2021
+//Move of one letter to the left
+void MoveString(char *label)
+{
+	//char newLabel[strlen(label)-1] ;
+ 	for (int i=0;i<strlen(label)-1;i++)
+ 	{
+		label[i]=label[i+1];
+	}
+	label[i]=NULL;
+}
 
 
+/*char* MoveString(char *label)
+{
+	char newLabel[strlen(label)-1] ;
+ 	for (int i=0;i<strlen(label)-2;i++)
+ 	{
+		newLabel[i]=label[i+1];
+	}
+	label[i+1]=NULL;
+}*/
 
 
+//***********************************MARVYN 24/06/2021*********************************************
+//MARVYN 28/06/2021  
+void modifyStepExpResult(int rowNb)
+{
+	Point cell;
+	int panelHandle = 0;
+	int panelHandle2 = 0;
+	char sCellValue[200]="";
+	
+	char *token;
+
+	
+	
+	
+	
+	panelHandle = LoadPanel(0, "IhmModes.uir",EXPRESULTS);
+	panelHandle2 = LoadPanel(0, "IhmModes.uir",PANEL_ADD);
 
 
+	SetCtrlAttribute(panelHandle - 3,EXPRESULTS_EXPLIST,ATTR_DIMMED,1);
 
+	cell.x=1;
+	cell.y=rowNb;
+	GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	
+	if (strcmp(sCellValue, "CheckTimingInterFrames") ==0)
+	{
+	 	SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,	ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,		ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,		ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+		SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, "[s]"); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,1); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
 
+		
+	 	cell.x = 2 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUEFC,sCellValue); 
+		
+		cell.x = 3 ; 
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		token = strtok(sCellValue, "|");
+		token[strlen(token)-1]=NULL;
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+		token = strtok(NULL, "|");
+		token[strlen(token)-1]=NULL;
+		MoveString(token);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+		cell.x = 4 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0); 
+
+		cell.x = 5 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+		cell.x = 6 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUE,sCellValue);
+
+		cell.x = 7 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;	
+		if (sCellValue == "0;")
+		{
+		cell.x = 8 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE1,sCellValue);
+		}
+		else
+		{
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE2,sCellValue);
+		}
+		
+		commandExpResult = 1;
+	}
+	else if (strcmp(sCellValue, "CheckTimingInterBursts") ==0)
+	{	    
+	
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,	ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+			SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, "[s]"); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0);
+
+		cell.x = 2 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUEFC,sCellValue); 
+		
+		cell.x = 3 ; 
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		token = strtok(sCellValue, "|");
+		token[strlen(token)-1]=NULL;
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+		token = strtok(NULL, "|");
+		token[strlen(token)-1]=NULL;
+		MoveString(token);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+		cell.x = 4 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0); 
+
+		cell.x = 5 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+		cell.x = 6 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUE,sCellValue);
+
+		cell.x = 7 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;	
+		if (sCellValue == "0;")
+		{
+		cell.x = 8 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE1,sCellValue);
+		}
+		else
+		{
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE2,sCellValue);
+		}
+		
+		
+		
+		commandExpResult = 2;
+	
+	}
+	else if (strcmp(sCellValue, "CheckFieldValue") ==0)
+	{
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+		SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, "[s,g,kPa...]"); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
+
+		cell.x = 3 ; 
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		token = strtok(sCellValue, "|");
+		token[strlen(token)-1]=NULL;
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+		token = strtok(NULL, "|");
+		token[strlen(token)-1]=NULL;
+		MoveString(token);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+		cell.x = 4 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0); 
+
+		cell.x = 5 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+		cell.x = 6 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUE,sCellValue);
+
+		cell.x = 7 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;	
+		if (sCellValue == "0;")
+		{
+		cell.x = 8 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE1,sCellValue);
+		}
+		else
+		{
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE2,sCellValue);
+		}
+		
+			commandExpResult = 3;     
+	}
+	else if (strcmp(sCellValue, "CheckSTDEV") ==0)
+	{
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,1);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,1);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,1);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,1); 
+				SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, "[degree]"); 
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,1);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,1);
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,0); 
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0); 
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0); 
+				SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
+
+				cell.x = 2 ;
+				GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	   			SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUEFC,sCellValue); 
+		
+				cell.x = 3 ; 
+				GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+				token = strtok(sCellValue, "|");
+				token[strlen(token)-1]=NULL;
+				SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+				token = strtok(NULL, "|");
+				token[strlen(token)-1]=NULL;
+				MoveString(token);
+				SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+				cell.x = 4 ;
+				GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			    SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0); 
+
+				cell.x = 5 ;
+				GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			    SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+				cell.x = 6 ;
+				GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+				sCellValue[strlen(sCellValue)-1]=NULL;
+			    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUE,sCellValue);
+				
+		    commandExpResult = 4;     
+			   
+	}
+	else if (strcmp(sCellValue, "CheckNbBursts") ==0)
+	{
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,1); 
+			SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, "bursts"); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
+		
+			cell.x = 2 ;
+			SetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	   		SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUEFC,sCellValue); 
+		
+			cell.x = 3 ; 
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			token = strtok(sCellValue, "|");
+			token[strlen(token)-1]=NULL; 
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+			token = strtok(NULL, "|");
+			token[strlen(token)-1]=NULL;
+			MoveString(token);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+			cell.x = 4 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0); 
+
+			cell.x = 5 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+			cell.x = 6 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			sCellValue[strlen(sCellValue)-1]=NULL;
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUE,sCellValue);
+			
+			commandExpResult = 5;                    
+			
+			
+	}
+	else if (strcmp(sCellValue, "CheckNbFramesInBurst") ==0)
+	{
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,1); 
+			SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, "frames"); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
+
+			cell.x = 2 ;
+			SetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	   		SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUEFC,sCellValue); 
+		
+			cell.x = 3 ; 
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			token = strtok(sCellValue, "|");
+			token[strlen(token)-1]=NULL; 
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+			token = strtok(NULL, "|");
+			token[strlen(token)-1]=NULL;
+			MoveString(token);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+			cell.x = 4 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0); 
+
+			cell.x = 5 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+			cell.x = 6 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			sCellValue[strlen(sCellValue)-1]=NULL;
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUE,sCellValue);
+			
+			commandExpResult = 6; 
+			
+	}
+	else if (strcmp(sCellValue, "CheckCompareP") ==0)
+	{
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,1);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+			SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, ""); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0);
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0); 
+			SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
+	
+			
+		 
+		
+			cell.x = 3 ; 
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			token = strtok(sCellValue, "|");
+			token[strlen(token)-1]=NULL; 
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+			token = strtok(NULL, "|");
+			token[strlen(token)-1]=NULL;
+			MoveString(token);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+			cell.x = 4 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0);
+			
+			cell.x = 5 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+			 cell.x = 7 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			sCellValue[strlen(sCellValue)-1]=NULL;	
+			if (sCellValue == "0;")
+			{
+			cell.x = 8 ;
+			GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+			sCellValue[strlen(sCellValue)-1]=NULL;
+		    SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE1,sCellValue);
+			}
+			else
+			{
+			SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE2,sCellValue);
+			}
+			
+			commandExpResult = 7;   
+	}
+	else if (strcmp(sCellValue, "CheckCompareAcc") ==0) 
+	{		
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+		SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, ""); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,1); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,1); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 1); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 1); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 1); 
+		
+		cell.x = 3 ; 
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		token = strtok(sCellValue, "|");
+		token[strlen(token)-1]=NULL;
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+		token = strtok(NULL, "|");
+		token[strlen(token)-1]=NULL;
+		MoveString(token);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+		cell.x = 4 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0);
+			
+		cell.x = 5 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+		cell.x = 7 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;	
+		if (sCellValue == "0;")
+		{
+		cell.x = 8 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE1,sCellValue);
+		}
+		else
+		{
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE2,sCellValue);
+		}
+		
+		commandExpResult = 8; 
+	   
+	}  
+	else if (strcmp(sCellValue, "CheckNoRF") ==0) 
+	{		
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,1); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,1);
+		SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, ""); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
+	   
+		cell.x = 3 ; 
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		token = strtok(sCellValue, "|");
+		token[strlen(token)-1]=NULL; 
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,token);
+		token = strtok(NULL, "|");
+		token[strlen(token)-1]=NULL;
+		MoveString(token);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL2,token);
+		
+		cell.x = 4 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0);
+			
+		cell.x = 5 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0);
+		
+		commandExpResult = 9;
+	}   
+	else if (strcmp(sCellValue, "CheckTimingFirstRF") ==0) 
+	{		
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL1,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_LABEL2,			ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUE,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TXTUNITLABEL,		ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDVAL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DELVALUE,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE1,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TOLERENCE2,		ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDTOL_2,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_ADDEXP,			ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_PARAMETERSDATA,	ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_FIELDCHECK,		ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_VALUEFC,			ATTR_DIMMED,0);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLVAL,		ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_BTNTOLPRCT,		ATTR_DIMMED,0); 
+		SetCtrlVal (GiExpectedResultsPanel, EXPRESULTS_TXTUNITBODY, "[s]"); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_FIXEDVALUE,ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_SEQVALUE,	 ATTR_DIMMED,1);
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTMSG_RANGEVALUE,ATTR_DIMMED,0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_DECORATION_7,	ATTR_VISIBLE, 0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_TEXTINCH,		ATTR_VISIBLE, 0); 
+		SetCtrlAttribute(GiExpectedResultsPanel,EXPRESULTS_WHEELDIM,		ATTR_VISIBLE, 0); 
+	 
+		cell.x = 2 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUEFC,sCellValue); 
+		
+		cell.x = 3 ; 
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL; 
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_LABEL1,sCellValue);
+		
+		
+		cell.x = 4 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_PARAMETERSDATA,0); 
+
+		cell.x = 5 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_FIELDCHECK,0); 
+
+		cell.x = 6 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+	    SetCtrlVal(panelHandle - 3,EXPRESULTS_VALUE,sCellValue);
+
+		cell.x = 7 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;	
+		if (sCellValue == "0;")
+		{
+		cell.x = 8 ;
+		GetTableCellVal(GiPanel,PANEL_MODE_EXP_RESULTS,cell, sCellValue);
+		sCellValue[strlen(sCellValue)-1]=NULL;
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE1,sCellValue);
+		}
+		else
+		{
+		SetCtrlVal(panelHandle - 3,EXPRESULTS_TOLERENCE2,sCellValue);
+		}
+		
+		commandExpResult = 10;
+	}   	
+		
+}
+
+	   
 
 
 
@@ -3377,7 +4084,7 @@ void couleurSelection(int numeroLigne,int control, int GiPanel, int color)
 {
 	Point cell;
 	cell.x=8;
-	cell.y=numeroLigne;				
+	cell.y=numeroLigne;
 	if (numeroLigne != 0)
 	{
 	SetTableCellRangeAttribute (GiPanel, control, VAL_TABLE_ROW_RANGE (numeroLigne),ATTR_TEXT_BGCOLOR, color);
@@ -3549,24 +4256,6 @@ int add_expected_results()
 	char cond_endid[100]="";
 	
 	
-	/*	if(iAnumLoad != 1 && iDataBaseLoad !=1 && iSetLogDirLoad != 1)
-		{
-			MessagePopup ("Warning", "No ANum Config and No DataBase and No Directory Selected!");
-		}
-		else if(iAnumLoad == 1 && iDataBaseLoad!=1 && iSetLogDirLoad != 1)
-		{
-			MessagePopup ("Warning", "No DataBase and No Directory Selected!");
-		}
-		else if(iAnumLoad != 1 && iDataBaseLoad == 1 && iSetLogDirLoad != 1)
-		{
-			MessagePopup ("Warning", "No ANum Config and No Directory Selected!");
-		}
-		else if(iAnumLoad != 1 && iDataBaseLoad != 1 && iSetLogDirLoad == 1)
-		{
-			MessagePopup ("Warning", "No ANum Config and No DataBase Selected!");
-		}
-		else
-		{ */
 	
 	if ((GiExpectedResultsPanel = LoadPanel (0, "IhmModes.uir", EXPRESULTS)) < 0)
 		return -1;
@@ -3623,18 +4312,18 @@ int add_expected_results()
 void add_menu()
 {
 
-	char range[30];						// Point exel ex: A2 , en chaine de caractère
-	char cond_end[100]="";				// Parameter du fichier excel en chaine de caractère
-	char parameter[100]="";             //char *parameterCompare=NULL;		// chaine de caractère qui cherche la fin des parametres sur le fichier excel
-	int boucle = 0;
-	int end=1;
+						// Point exel ex: A2 , en chaine de caractère
+				// Parameter du fichier excel en chaine de caractère
+	            //char *parameterCompare=NULL;		// chaine de caractère qui cherche la fin des parametres sur le fichier excel
+
+
 	int endid=1;
 	int boucleid = 0;
 	int parameterCompare;
 	char rangeid[30];
 	char wuid[100]="";
 	char cond_endid[100]="";
-	int panelHandle2 = 0 ;
+
 
 	if(iAnumLoad!= 1 && iDataBaseLoad!=1)
 	{
@@ -3870,7 +4559,7 @@ int CVICALLBACK lfdname (int panel, int control, int event,
 
 			for(boucle=0; boucle < strlen(nameMLF); boucle++)
 			{
-				if(nameMLF[boucle]=='i' && nameMLF[boucle+1]=='n' && nameMLF[boucle+2]=='d' )
+				if(nameMLF[boucle]=='I' && nameMLF[boucle+1]=='n' && nameMLF[boucle+2]=='d' )
 				{
 					wuid=1;
 				}
@@ -3884,8 +4573,8 @@ int CVICALLBACK lfdname (int panel, int control, int event,
 			else
 			{
 				//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DECORATION_WUID,ATTR_VISIBLE,1);
-				//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED, 1);
-				//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED, 1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED, 1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED, 1);
 			}
 
 			break;
@@ -3902,8 +4591,8 @@ int CVICALLBACK lfdnbframe (int panel, int control, int event,
 							void *callbackData, int eventData1, int eventData2)
 {
 	char nameMLF[100]="";
-	int boucle;
-	int wuid =0;
+
+
 
 
 	switch (event)
@@ -4766,8 +5455,8 @@ int CVICALLBACK  GstTableRun (int panel, int control, int event,
 	int iTop;
 	int iLeft;
 	int iIdSelected;
-	char PathsArray[500][500];
-	char RNoArray[500][500];
+
+
 	float TempoTotal = 0;
 
 
@@ -4780,9 +5469,9 @@ int CVICALLBACK  GstTableRun (int panel, int control, int event,
 	char sCellValue2[200]="";
 
 	int boucle=0;
-	int EndBoucle=0;
+
 	////////move
-	int numeroLigne=0, errDir = 0;
+	int numeroLigne=0;
 
 
 	switch (event)
@@ -4815,13 +5504,14 @@ int CVICALLBACK  GstTableRun (int panel, int control, int event,
 				switch(iIdSelected)
 				{
 					case GST_RUN_MAIN_ADD:
-					
+							addChoice = 1 ;
 							InsertTestCasesIntoTables(iNumberOfRows + 1,panel);
 
 						break;
 					
 					case GST_RUN_MAIN_INSERT:
 						    //MARVYN 23/06/2021
+							addChoice = 1 ;
 							numRow = rect.top ;
 							couleurSelection(numRow,PANEL_MODE_TABLE_SCRIPT, panel,VAL_LT_GRAY );
 							//****
@@ -4877,7 +5567,7 @@ int CVICALLBACK  GstTableRun (int panel, int control, int event,
 						else
 						{
 
-							for(boucle=1; boucle < 4 ; boucle++)  //9 ??
+							for(boucle=1; boucle < 4 ; boucle++)  
 							{
 								cell.x=boucle; // 1 
 								cell.y =numeroLigne; // 3
@@ -4931,7 +5621,7 @@ int CVICALLBACK  GstTableRun (int panel, int control, int event,
 						GetProjectDir(sProjectDir);
 						strcpy(ProjectDirectory, sProjectDir);
 						confpath = strcat(ProjectDirectory,"\\Config");
-						iRet = FileSelectPopupEx (confpath, "*.", "txt", "", VAL_LOAD_BUTTON, 0, 1, fileName); 
+						iRet = FileSelectPopupEx (confpath, ".txt", ".txt", "", VAL_LOAD_BUTTON, 0, 1, fileName); 
 						//iRet = FileSelectPopup (confpath, "*.","txt", "", VAL_LOAD_BUTTON, 0, 0, 1, 1, fileName);
 						if(iRet != 0) LoadConfiguration(fileName);
 
@@ -5004,8 +5694,10 @@ void InsertTestCasesIntoTables(int RowPosition, int panel)
 		}
 	}
 	//MARVYN 23/06/2021
+	if (addChoice == 0)
+	{
 	couleurSelection(numRow+numFiles,PANEL_MODE_TABLE_SCRIPT, panel,VAL_WHITE  )  ;
-
+	}
 }
 
 
@@ -5485,19 +6177,19 @@ void CVICALLBACK Configuration (int menuBar, int menuItem, void *callbackData,
 #define iTAILLE_MAX_ERR_MSG	5000
 #define iBKG_ERROR_COLOR	0x00FFDDDD
 	//char sTpsEcoule[50];
-	char sErrorMsg[iTAILLE_MAX_ERR_MSG];
+
 	//char sComments[iMAX_CHAR_COMMENTS+2];
 	char sProjectDir[MAX_PATHNAME_LEN];
-	char sFileName[MAX_PATHNAME_LEN];
-	int iNbCyclesVit;
-	int iNbCyclesPres;
-	int iRet=0;
-	int iErr;
+	
+
+	
+
+
 	//int i;
 	//int iUnitVitesse;
 	//int iUnitPression;
 	//int iPanelStatusDisplayed;
-	int iAffMsg;
+
 	//int iHeures;
 	//int iMinutes;
 	//int iSecondes;
@@ -5510,10 +6202,10 @@ void CVICALLBACK Configuration (int menuBar, int menuItem, void *callbackData,
 	//char **fileList = NULL, **ppc = NULL;
 	//int numFiles;
 
-	char fileName[MAX_PATHNAME_LEN];
 
-	char *confpath;
-	char ProjectDirectory[MAX_PATHNAME_LEN];
+
+
+	
 
 	// Formation du chemin vers le répertoire des configurations
 	GetProjectDir(sProjectDir);
@@ -5945,6 +6637,7 @@ void CVICALLBACK Quitter (int menuBar, int menuItem, void *callbackData,
 	applicationHandleProject   = 0;
 
 	killPIDprocess(databasePID);  //MODIF MaximePAGES 23/06/2020 - E002 - We kill the database Excel process.
+	killAllProcExcel(myListProcExcelPID);//kill tous les processus excel  
 	free(myParameterTab);
 
 
@@ -6484,6 +7177,7 @@ BOOL CheckPrecondition()
 		MessagePopup("Warning","Please select the .xlsx tests config file!");
 		return FALSE;
 	}
+	//Modif MARVYN 12/07/2021
 	if(!FileExists(GsLogPath,&fSize))
 	{
 		Beep();
@@ -7893,12 +8587,14 @@ void ShowTotalTimeAndTranslateScripts(int panel, int rowNo)
 			EndFromExcel = atoi(sCellValue);
 			//Calcul of time
 			TempoTotal = EndFromExcel + TempoTotal;
-
 		}
 	}
 
 	// Modif MaximePAGES 16/07/2020 - Seq Progress Bar **************
 	estimatedTimeSeq = (TempoTotal+0.31*60*rowNo);
+	//Tend = TempoTotal ;
+//	printf("test2 = %f\n",Tend);
+//	printf("test = %f\n",estimatedTimeSeq);
 	SetCtrlVal(panel,PANEL_MODE_TOTALTIME, estimatedTimeSeq);
 	ProgressBar_SetTotalTimeEstimate (GiPanel, PANEL_MODE_PROGRESSBARSEQ, estimatedTimeSeq);
 	ProgressBar_Start(GiPanel,PANEL_MODE_PROGRESSBARSEQ,"Sequence Progress Bar:");
@@ -8252,12 +8948,51 @@ int Time1 = 0;
 int Time2 = 0;
 char range1[255] = "";
 char range2[255] = "";
+int lab1=0;
+int lab2=0;
 //***********************************************************************************************
+//MARVYN Modif 02/07/2021 : re implementation de la fonction d'une autre manière
 void RetrieveandSeparateLabel(char *label)
 {
 
-	char caracter[] = " | ;";
-	char *token1 = strtok(label, caracter);
+	char caracter[] = " |";
+	char *token;
+	char *tab[2]={NULL};
+	int i=0;
+	lab1 =0;
+	lab2=0;
+	
+	if (label[0] == ' ' && label[1] == '|')
+	{
+	strcpy(label1,"");
+	strcpy(label2,strtok(label,caracter));
+	label2[strlen(label2)-1]=NULL;
+	lab1 = 1;
+	TwoLabs = 0;
+	FirstLab = 0;
+	}	
+	else
+	{
+	token = strtok(label,caracter);
+	while (token != NULL)
+	    {
+		printf(" %s\n ",token);
+		tab[i]=token;
+		token = strtok(NULL, caracter);
+		i++;
+		}
+	strcpy(label1, tab[0]);
+	strcpy(label2, tab[1]);
+	label2[strlen(label2)-1]=NULL;
+	lab1=0;
+	}
+	if (strcmp(label2,"") == 0) lab2=1;
+	if (lab1==0 && lab2==0) TwoLabs=1;
+	if (lab1==1 && lab2==0) FirstLab=1;
+	printf("\n\n retrieve label1 = __%s__ and label2 = __%s__\n\n",label1,label2);
+	 
+	
+/*	char *token1 = strtok(label, caracter);
 	char *tabtoken[2] = {NULL};
 	int i = 0;
 
@@ -8271,10 +9006,15 @@ void RetrieveandSeparateLabel(char *label)
 			i++;
 		}
 	}
-
+	if ( tabtoken[0] != NULL )
+	{
 	strcpy(label1, tabtoken[0]);
+	}
+	if ( tabtoken[1] != NULL )
+    {
 	strcpy(label2, tabtoken[1]);
-
+	}
+	printf("\n\n retrieve lab1 = __%s__ and lab2 = __%s__\n\n",label1,label2);*/
 }
 
 //***********************************************************************************************
@@ -8502,9 +9242,25 @@ int InsertTwoLabel()
 	if (Time1 == 0)
 	{
 		Time1=1000;
-		fprintf(file_handle, "Problem into InsertTwoLabel() function : time of Label1 = 0.Set by default at 1000 ms.");
+		fprintf(file_handle, "Problem into InsertTwoLabel() function : time of Label1 = 0.Set by default at 1000 ms.\n");
 
 	}
+/*	if (lab2=1) 
+	{
+		Time2=Tend*1000;
+	}  */
+		/*	
+if (Time2 == 0)
+	{*/
+   // printf("\nTime2 = %f\n",Tend);
+	/*	Time2=Tend*1000;
+		fprintf(file_handle, "Problem into InsertTwoLabel() function : time of Label2 = 0.Set by default at %d ms.",Time2);
+
+	} */
+/*	if (label1 == 1)
+	{
+		Time1=Time2;
+	}  */
 
 
 	if(token2 != NULL)
@@ -8567,6 +9323,7 @@ int InsertTwoLabel()
 				if ( (strcmp(AddLabel2_condition,"") == 0) &&  (label2Placed == 0) )
 				{
 					label2Placed = 1;
+					//printf("label2 = %s\n",label2  );
 					fprintf(file_handle, "\nProblem into InsertTwoLabel() function : label 2 time not found. Set by default at the end.\n");
 					ExcelRpt_SetCellValue (worksheetHandle9, rangeA2, CAVT_CSTRING , label2);
 					end=0;
@@ -8576,7 +9333,6 @@ int InsertTwoLabel()
 				if ( (label2Placed == 1) &&  (label1Placed == 0) )
 				{
 					fprintf(file_handle, "Problem into InsertTwoLabel() function : label 1 time not found. Set by default at 1000 ms.");
-
 					sprintf(rangeA1, "A%d", rowAt1000);
 					ExcelRpt_SetCellValue (worksheetHandle9, rangeA1, CAVT_CSTRING , label1);
 					end=0;
@@ -8621,7 +9377,7 @@ int InsertOneLabel()
 	ExcelRpt_WorkbookOpen (applicationHandleProject, fichierLogxml, &workbookHandle9);
 	ExcelRpt_GetWorksheetFromIndex(workbookHandle9, 1, &worksheetHandle9);
 
-
+	//printf("i am in InsertOneLabel\n\n\n");
 	ExcelRpt_Find(worksheetHandle9,CAVT_CSTRING, searchData, "A1",ExRConst_Values, ExRConst_Whole, ExRConst_ByRows,ExRConst_Next ,1,0,foundCellRangeTime);
 	char caracter1[] = "$";
 	char *token1 = strtok(foundCellRangeTime, caracter1);
@@ -8675,6 +9431,90 @@ int InsertOneLabel()
 	}
 
 }
+
+//MARVYN 05/07/2021******************************************************************************
+
+int InsertOneLabel2()
+{
+	int boucle = 0, end = 1;
+	char TimeColumn[255] = "";
+	char range[30] = "";
+	char rangeA[30] = "";
+	char rangeA1[30] = "";
+	char searchData[15] = "/ROW/@_RTime";
+	char foundCellRangeTime[50]="";
+	float intTimeColumn = 0;
+	char cellTime[255] = "";
+	char AddLabel2_condition[255] = "";
+	
+	/*if (Time1 == 0)
+	{
+		Time1=1000;
+		fprintf(file_handle, "Problem into InsertTwoLabel() function : time of Label1 = 0.Set by default at 1000 ms.\n");
+	 }*/
+	
+//	ExcelRpt_ApplicationNew(VFALSE,&applicationHandle9); //needs to be VFALSE
+	ExcelRpt_WorkbookOpen (applicationHandleProject, fichierLogxml, &workbookHandle9);
+	ExcelRpt_GetWorksheetFromIndex(workbookHandle9, 1, &worksheetHandle9);
+
+	//printf("i am in InsertOneLabel2\n\n\n");
+	ExcelRpt_Find(worksheetHandle9,CAVT_CSTRING, searchData, "A1",ExRConst_Values, ExRConst_Whole, ExRConst_ByRows,ExRConst_Next ,1,0,foundCellRangeTime);
+	char caracter1[] = "$";
+	char *token1 = strtok(foundCellRangeTime, caracter1);
+	if(token1 == NULL)
+		fprintf(file_handle, "An error has occured\nThe column %s was not found!\n\n", searchData);
+	else
+		strcpy(cellTime, token1);
+
+	if(token1 != NULL)
+	{
+		if((Time1 ==0) && (Time2 != 0))
+		{
+			//parcourir column to find time
+			for(boucle=2; end==1; boucle++)
+			{
+				sprintf(range,"%s%d",cellTime, boucle+1);
+				ExcelRpt_GetCellValue (worksheetHandle9, range, CAVT_CSTRING, TimeColumn);
+				intTimeColumn = atof(TimeColumn);
+
+				if(intTimeColumn == Time2)
+				{
+					sprintf(rangeA1, "A%d", boucle);
+					ExcelRpt_GetCellValue (worksheetHandle9, rangeA1, CAVT_CSTRING, AddLabel2_condition);
+
+					if(strcmp(AddLabel2_condition, label2) != 0)
+					{
+						ExcelRpt_InsertRow(worksheetHandle9, boucle+1, 1);
+						sprintf(rangeA, "A%d", boucle+1);
+						ExcelRpt_SetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING , label2);
+						boucle=boucle+1;
+						end = 0;
+					}
+					else
+					{
+						end=0;
+					}
+				}
+
+			}
+			end=1;
+		}
+
+
+		NBTestCheck++;
+		return 0;
+	}
+	else
+	{
+
+		return -1;
+	}
+
+}
+
+
+
+
 
 //***********************************************************************************************
 // Modif - Carolina 04/2019
@@ -8885,6 +9725,7 @@ int CheckTimingInterFrames(char * wuID, char *realValue, char *FCParam, char *Fu
 	char WUIDRange[30] = "";
 	char cellWUIDRange[30] = "";
 	char WUID[30] = "";
+	int noLab=0; 
 
 
 	strcpy(auxVal, realValue); 						 // auxVal = "105;" or "105;117;129;" (fixed value or a sequence)
@@ -8963,7 +9804,28 @@ int CheckTimingInterFrames(char * wuID, char *realValue, char *FCParam, char *Fu
 
 	if(token1 != NULL && token2 != NULL && token3 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (% dms)\n", 	label1, Time1, label2, Time2);
+		if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Function code: %s\n",		FunctionCode);
 		fprintf(file_handle, "Expected IF timing: %s sec\n",				realValue);
 		fprintf(file_handle, "Tolerance value: %f ms\n", 	dtolValue);
@@ -8977,7 +9839,7 @@ int CheckTimingInterFrames(char * wuID, char *realValue, char *FCParam, char *Fu
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
 			//starting check when label1 was found
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(int i = boucle+1 ; endCondition == 1; i++)
@@ -9189,6 +10051,8 @@ int CheckTimingInterFrames(char * wuID, char *realValue, char *FCParam, char *Fu
 
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition of check
 					{
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -9198,7 +10062,9 @@ int CheckTimingInterFrames(char * wuID, char *realValue, char *FCParam, char *Fu
 
 						endCondition = 0; //stop ckeck
 						end = 0;
-					}
+						}
+						noLab=1;
+					}   
 				}
 			}
 		}
@@ -9275,7 +10141,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 	char WUIDRange[30] = "";
 	char cellWUIDRange[30] = "";
 	char WUID[30] = "";
-
+	int noLab =0;
 
 	strcpy(valueForPrint,Value);
 	strcpy(auxVal, Value);  // auxVal = "0-4;" or "105;" or "105;117;129;"
@@ -9363,8 +10229,28 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 
 	if(token1 != NULL && token3 != NULL && tokenWUID != NULL)
 	{
-
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+		if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Parameter: %s\n", 		CheckParam);
 		fprintf(file_handle, "Expected %s value(s): %s\n", Parametertocheck,	valueForPrint);
 		fprintf(file_handle, "Tolerance value: %f\n", 	tolValue);
@@ -9382,27 +10268,32 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 			sprintf(rangeA, "A%d", boucle+1);
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
-//			if(strcmp(label1, "StartTest") == 0)
-			if(strcmp(label1, _ATimeColumn) == 0)
+//			if(strcmp(label1, "StartTest") == 0) 
+			//|| label1 == NULL or strcmp(label1,"") ==0
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
+				//printf("label1 = %s and ATIME = %s",label1,_ATimeColumn);
+				//printf("je suis bien entré");
 				//analyse until find label 2
 				for(int i = boucle+1 ; endCondition == 1; i++)
 				{
-
+				
 					//check Goodsm first
-					sprintf(GoodSumRange,"%s%d",cellGoodSumRange, i); //P3
+				
+					sprintf(GoodSumRange,"%s%d",cellGoodSumRange, i);//P3
 					ExcelRpt_GetCellValue (worksheetHandle9, GoodSumRange, CAVT_CSTRING, CKSGood);
-
+					printf("CKSGood = %s\n",CKSGood);
 					if(strcmp(CKSGood, "1") == 0)
 					{
-
-						// we look for the good WU ID
-						sprintf(WUIDRange,"%s%d",cellWUIDRange, i);
+						
+						sprintf(WUIDRange,"%s%d",cellWUIDRange, i);//P3
+					
+						
 						ExcelRpt_GetCellValue (worksheetHandle9, WUIDRange, CAVT_CSTRING, _WUIDColumn);
 
 						if(strcmp(_WUIDColumn, wuID) == 0)
 						{
-
+						  //printf("OK2"); 
 							CKSGoodvalid++ ;
 							//***************************************************************************
 							//case where you are looking for an exact value
@@ -9410,6 +10301,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 							if( tolpercent == 0 && tolValue == 0)
 							{
 								//start analysis
+							
 								sprintf(range,"%s%d",cellParamRange, i);
 								ExcelRpt_GetCellValue (worksheetHandle9, range, CAVT_CSTRING, varParam);  //varParam = Value
 								switch(typeValue)
@@ -9426,6 +10318,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 											//dRange2 = dRange2 + tolValue;
 											if(ivarParam >= dRange1 && ivarParam <= dRange2)
 											{
+												//printf("***1***\n");
 												validframes++;
 
 											}
@@ -9440,34 +10333,15 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 
 
 
-
-
-										/*
-										if((strcmp(varParam, "") != 0) && (strcmp(varParam, auxVal2) != 0))
-										{
-											ivarParam = atof(varParam);
-											if(ivarParam >= dRange1 && ivarParam <= dRange2)
-											{
-												validframes++;
-
-											}
-											else
-											{
-												notvalidframes++;
-												fprintf(file_handle, "The obtained value - %s - in the line %d is not between the range [ %f, %f] \n", varParam, i, dRange1, dRange2);    //range
-												failedParam = 1;
-											}
-										}
-										break;*/
-
 									case 1:   //one value
+										//printf("\nvarParam = %s and  auxVal2 = %s\n",varParam,auxVal2);
 										if((strcmp(varParam, "") != 0) && (strcmp(varParam, auxVal2) != 0))
 										{
 											notvalidframes++;
 											fprintf(file_handle, "The expected value - %s - does not match to the received value - %s - in the line %d\n", Value, varParam, i);    //range
 											failedParam = 1;
 										}
-										else validframes++;
+										else validframes++;//, printf("***10***\n");
 
 										break;
 
@@ -9483,13 +10357,14 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 												{
 													notvalide++;
 												}
-												else valide++;
+												else valide++;//,printf("***2***\n");
 
 											}
 
 											if(notvalide == nb)
 											{
 												notvalidframes++;
+													//printf("***3***\n");    
 												fprintf(file_handle, "The expected values - %s - do not match to the received value - %s - in the line %d\n", Value, varParam, i);    //range  											failedParam = 1;
 												notvalide=0;
 												failedParam = 1;
@@ -9497,6 +10372,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 											else
 											{
 												validframes++;
+													//printf("***2***\n");    
 												notvalide=0;
 											}
 										}
@@ -9534,6 +10410,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 											if(ivarParam >= dRange1 && ivarParam <= dRange2)
 											{
 												validframes++;
+												//printf("***4***\n");
 
 											}
 											else
@@ -9558,6 +10435,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 											if(ivarParam >= NegLimit && ivarParam <= PosLimit)
 											{
 												validframes++;
+												//printf("***5***\n");
 
 											}
 											else
@@ -9608,6 +10486,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 										else
 										{
 											validframes++;
+											//printf("***6***\n");
 											notvalide=0;
 										}
 										break;
@@ -9645,6 +10524,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 											if(ivarParam >= dRange1 && ivarParam <= dRange2)
 											{
 												validframes++;
+												//printf("***7***\n");
 
 											}
 											else
@@ -9670,7 +10550,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 											if(ivarParam >= NegLimit && ivarParam <= PosLimit)
 											{
 												validframes++;
-
+												//printf("***8***\n");
 											}
 											else
 											{
@@ -9718,6 +10598,7 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 											else
 											{
 												validframes++;
+												//printf("***9***\n");
 												notvalide=0;
 											}
 										}
@@ -9739,13 +10620,15 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 
 					sprintf(rangeA, "A%d", i);
 					ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
-
-
-//					if (++a==10)
-
-
+					
+				
+						
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition check
 					{
+					//	printf("lab11 = %d and lab21 = %d\n",FirstLab,TwoLabs);
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
+						printf("\n%s and %s\n",label2,_ATimeColumn);
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -9766,6 +10649,8 @@ int CheckFieldValue(char * wuID, char *Parametertocheck, char *Value, double tol
 							//fprintf(file_handle, "CheckFieldValue ... failed!\n\n");
 							varCheckFieldValue = 1; // CheckFieldValue is failed
 						}
+						}
+						noLab = 1;
 					}
 				}
 			}
@@ -9843,7 +10728,7 @@ int CheckSTDEV(char * wuID, char *Value, double iaverage, char *sFrameNb, char *
 	char WUIDRange[30] = ""; 
 	char cellWUIDRange[30] = ""; 
 	char WUID[30] = ""; 
-
+	int  noLab=1; 
 
 
 	//angle value 0 - 360
@@ -9929,7 +10814,28 @@ int CheckSTDEV(char * wuID, char *Value, double iaverage, char *sFrameNb, char *
 
 	if(token1 != NULL && token2 != NULL && token3 != NULL && token4 != NULL && token5 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+		if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Function code: %s\n",FunctionCodeValue);
 		fprintf(file_handle, "Frame number: %s\n", iFrameNB);
 		fprintf(file_handle, "Angle emission: %d\n\n", iAngleEmission);
@@ -9943,7 +10849,7 @@ int CheckSTDEV(char * wuID, char *Value, double iaverage, char *sFrameNb, char *
 			sprintf(rangeA, "A%d", boucle+1);
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(int i = boucle+1 ; endCondition == 1; i++)
@@ -10117,6 +11023,8 @@ int CheckSTDEV(char * wuID, char *Value, double iaverage, char *sFrameNb, char *
 					ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition check
 					{
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -10153,8 +11061,8 @@ int CheckSTDEV(char * wuID, char *Value, double iaverage, char *sFrameNb, char *
 							failResult = 1;
 							fprintf(file_handle, "There are no emissons between the labels");
 						}
-
-
+						}
+						noLab=1;
 					} //if label2
 
 				}  //2nd boucle for
@@ -10610,6 +11518,7 @@ int CheckNoRF(char * wuID)
 
 	int CKSGoodvalid = 0;
 	int CKSGoodinvalid = 0;
+	int noLab=0;
 	
 	char CheckWUID[30] = 		"/ROW/@ID"; 
 	char _WUIDColumn[255] = "";
@@ -10668,8 +11577,29 @@ int CheckNoRF(char * wuID)
 
 	if(token2 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
-
+			if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
+		
 
 		for(boucle=2; end==1; boucle++)
 		{
@@ -10677,7 +11607,7 @@ int CheckNoRF(char * wuID)
 			sprintf(rangeA, "A%d", boucle+1);
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(int i = boucle+1 ; endCondition == 1; i++)
@@ -10741,6 +11671,8 @@ int CheckNoRF(char * wuID)
 
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition check
 					{
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						/*if(zerofound == 0)
 						{
 							fprintf(file_handle, "\nCKSGood ... OK!\n");
@@ -10771,6 +11703,8 @@ int CheckNoRF(char * wuID)
 
 						endCondition = 0; //stop analysis
 						end = 0;
+						}
+						noLab=1;
 					} //if label 2
 				} //for i
 			} //if label 1
@@ -10906,6 +11840,7 @@ int CheckTimingFirstRF(char * wuID, char *Value, char *FCParam, char *FunctionCo
 
 	if(token1 != NULL && token2 != NULL && token3 != NULL && token4 != NULL && tokenWUID != NULL)
 	{
+		
 		fprintf(file_handle, "Between %s and first RF\n", 		label1);
 		fprintf(file_handle, "Function code: %s\n",				FunctionCode);
 		fprintf(file_handle, "Expected range: %f:%f\n", 			dRange1,dRange2);
@@ -11098,7 +12033,7 @@ int CheckNbBursts(char * wuID, int realValue, char *FCParam, char *FunctionCode)
 	char rangeFC[30] = "";
 	char _FunctionCode[50] = "";
 	double dtime = 0.0, auxtime = 0.0, sub = 0.0;
-	int countInterBurst = 0;
+	
 	int CheckNB=0;
 	int countNbBurst = 0;
 	int CKSGoodvalid = 0;
@@ -11109,7 +12044,7 @@ int CheckNbBursts(char * wuID, int realValue, char *FCParam, char *FunctionCode)
 	char WUIDRange[30] = "";
 	char cellWUIDRange[30] = "";
 	char WUID[30] = "";
-
+	int noLab=0;
 
 
 	fprintf(file_handle, "\n***************CheckNbBursts***************\n");
@@ -11158,7 +12093,28 @@ int CheckNbBursts(char * wuID, int realValue, char *FCParam, char *FunctionCode)
 
 	if(token1 != NULL && token2 != NULL && token3 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+		if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Function code: %s\n",FunctionCode);
 		fprintf(file_handle, "Expected Bursts Nb: %d\n\n", 	realValue);
 
@@ -11170,7 +12126,7 @@ int CheckNbBursts(char * wuID, int realValue, char *FCParam, char *FunctionCode)
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
 			//starting check when label1 was found
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(int i = boucle+1 ; endCondition == 1; i++)
@@ -11238,6 +12194,8 @@ int CheckNbBursts(char * wuID, int realValue, char *FCParam, char *FunctionCode)
 
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition check
 					{
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -11247,6 +12205,8 @@ int CheckNbBursts(char * wuID, int realValue, char *FCParam, char *FunctionCode)
 
 						endCondition = 0; //stop analysis
 						end = 0;
+						}
+						noLab=1;
 					}
 				}
 			}
@@ -11317,7 +12277,7 @@ int CheckNbFramesInBurst(char * wuID, int realValue, char *FCParam, char *Functi
 	char WUIDRange[30] = ""; 
 	char cellWUIDRange[30] = ""; 
 	char WUID[30] = ""; 
-
+	int noLab=0;
 	
 	
 	fprintf(file_handle, "\n***************CheckNbFramesInBurst***************\n");
@@ -11365,7 +12325,28 @@ int CheckNbFramesInBurst(char * wuID, int realValue, char *FCParam, char *Functi
 
 	if(token1 != NULL && token2 != NULL && token3 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+		if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Function code: %s\n",FunctionCode);
 		fprintf(file_handle, "Expected Frames Nb in Bursts: %d\n\n", 	realValue);
 
@@ -11377,7 +12358,7 @@ int CheckNbFramesInBurst(char * wuID, int realValue, char *FCParam, char *Functi
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
 			//starting check when label1 was found
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(int i = boucle+1 ; endCondition == 1; i++)
@@ -11453,6 +12434,8 @@ int CheckNbFramesInBurst(char * wuID, int realValue, char *FCParam, char *Functi
 
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition of check
 					{
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -11462,7 +12445,9 @@ int CheckNbFramesInBurst(char * wuID, int realValue, char *FCParam, char *Functi
 
 						endCondition = 0; //stop ckeck
 						end = 0;
-					}
+						}
+						noLab=1;
+					}   
 				}
 			}
 		}
@@ -11538,7 +12523,7 @@ int CheckTimingInterBursts(char * wuID, char *realValue, char *FCParam, char *Fu
 	char WUIDRange[30] = "";
 	char cellWUIDRange[30] = "";
 	char WUID[30] = "";
-
+	int noLab=0;
 
 
 	strcpy(auxVal, realValue); 						 // auxVal = 5;
@@ -11593,7 +12578,28 @@ int CheckTimingInterBursts(char * wuID, char *realValue, char *FCParam, char *Fu
 	
 	if(token1 != NULL && token2 != NULL && token3 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+		if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Function code: %s\n",	FunctionCode);
 		fprintf(file_handle, "Expected IB timing: %s sec\n",				realValue);
 		fprintf(file_handle, "Tolerance value: %f ms\n", 	dtolValue);
@@ -11609,15 +12615,16 @@ int CheckTimingInterBursts(char * wuID, char *realValue, char *FCParam, char *Fu
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
 			//starting check when label1 was found
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(i = boucle+1 ; endCondition == 1; i++)
 				{
 					//1 - check Goodsm first
 					sprintf(GoodSumRange,"%s%d",cellGoodSumRange, i); //P3
+					printf("Cell num = %s%d\n",cellGoodSumRange, i);
 					ExcelRpt_GetCellValue (worksheetHandle9, GoodSumRange, CAVT_CSTRING, CKSGood);
-
+					printf("CKSgood = %s\n",CKSGood);
 					if(strcmp(CKSGood, "1") == 0)
 					{
 
@@ -11738,6 +12745,8 @@ int CheckTimingInterBursts(char * wuID, char *realValue, char *FCParam, char *Fu
 
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition of check
 					{
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -11747,6 +12756,8 @@ int CheckTimingInterBursts(char * wuID, char *realValue, char *FCParam, char *Fu
 
 						endCondition = 0; //stop ckeck
 						end = 0;
+						}
+						noLab=1;
 					}
 				}
 			}
@@ -11838,7 +12849,7 @@ void openingExpectedResults(char *testScriptFile, char *sProjectDir, char * sDir
 	//int ** tabtoken = NULL;
 	//****************
 
-	double iaverage = 0;
+	
 	int iResultSTDEV = 0, CheckFieldValueOK = 0, LabelRF = 0, iNbofBurst=0, iNoRF = 0, iFirstRF = 0, NbofFrames = 0;
 	int iTimingInterBursts = 0, iTimingInterFrames = 0;
 	int iCompareP = 0,  iCompareAcc = 0;
@@ -12011,6 +13022,7 @@ void openingExpectedResults(char *testScriptFile, char *sProjectDir, char * sDir
 			{
 				int a = strcmp(labelTS, label1);
 				int b = strcmp(labelTS, label2);
+				//printf("\n\n\nLABELTS is __%s__\n\n\n",labelTS);
 				if((a == 0) || (b == 0))
 				{
 					cell.x = 1;
@@ -12035,9 +13047,16 @@ void openingExpectedResults(char *testScriptFile, char *sProjectDir, char * sDir
 					Time = Time * 1000;
 					tabtoken[j] = Time;
 					Time1 = tabtoken[0];
+					//printf("TIME11 = %d\n",Time1);
 					Time2 = tabtoken[j];
+					//printf("TIME21 = %d\n",Time2);
+					if (lab1 == 1)
+					{
+					Time1 = 0;
+					}
+					
 					j++;
-				}
+					}
 			}
 			else
 			{
@@ -12065,14 +13084,18 @@ void openingExpectedResults(char *testScriptFile, char *sProjectDir, char * sDir
 
 
 		//Insert Label needs to be after time acquisiton
-		if(LabelRF == 0)
+		if(LabelRF == 0 && lab1 == 0 || lab2 == 1)
 		{
 			errTwoLabel = InsertTwoLabel();   //insert the same label just one time !!!!!
 		}
-		else
+		else if (lab1 == 0 && LabelRF == 1)
 		{
 			errOneLabel = InsertOneLabel();
 			LabelRF = 0;
+		}
+		else
+		{
+			errOneLabel = InsertOneLabel2();
 		}
 
 		// Modif MaximePAGES 14/08/2020 - WU ID modification (test for each WU ID)
@@ -12386,7 +13409,7 @@ void openingExpectedResults(char *testScriptFile, char *sProjectDir, char * sDir
 	if (ongoingAnalyse == 1)  //ANALYSE MODE
 	{
 		
-		int c;
+	
 		int len = 0;
 		char line[1000];
 		FILE *file;
@@ -12487,15 +13510,15 @@ void resetVariables()
 static int CVICALLBACK ThreadCycleRun (void *functionData)
 {
 #define dDELAY_THREAD_RUN 		0.3
-	double dTime = 0;
+	
 	//int iErr=0;
 	CDotNetHandle exception,exp ;
 	Point cell;
 	int i=1;
 	char exeTestXls[255];
-	char newExeTestXls[255];
-	char currentTestName[255];
-	char * newCurrentTestName;
+
+	
+
 	char exeTestXML[MAX_PATHNAME_LEN];
 	char exeNoTest[10];
 	int rowNo=0;
@@ -12512,11 +13535,11 @@ static int CVICALLBACK ThreadCycleRun (void *functionData)
 	char text[500];
 	char sFileNameXML[500];
 
-	SYSTEMTIME t; // Declare SYSTEMTIME struct
-	char date[50];
+
+
 	char filenameCoverageMatrix[500]="";
 	
-	int ongoingTest = 1;
+
 
 	while (!GetGbQuitter())// && (ongoingTest == 1))
 	{
@@ -12534,7 +13557,7 @@ static int CVICALLBACK ThreadCycleRun (void *functionData)
 
 			DeleteTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS_2, 1, -1);
 			SetCtrlVal(GiPanel,PANEL_MODE_ENDTIMESEQUENCE, EndTimeCurrentScript);
-
+		//	Tend = EndTimeCurrentScript;
 			//Modif MaximePAGES 1/07/2020 - Script Progress Bar E402 **
 			ProgressBar_SetPercentage(GiPanel, PANEL_MODE_PROGRESSBAR, EndTimeCurrentScript, "Script Progress Bar:");
 			// **
@@ -12542,7 +13565,7 @@ static int CVICALLBACK ThreadCycleRun (void *functionData)
 
 
 
-			if ( GetGiStartCycleRun())  //executing test sequence
+			if (  GetGiStartCycleRun())  //executing test sequence
 			{
 				GetNumTableRows(GiPanel, PANEL_MODE_TABLE_SCRIPT,&rowNo);
 
@@ -15621,146 +16644,130 @@ int CVICALLBACK insert_step (int panel, int control, int event,
 	}
 	return 0;
 }
-
-
-
-//***********************************************************************************************
-// Modif - Carolina 02/2019
-// Test with button select Anum config - for ergonomic
-//***********************************************************************************************
-int CVICALLBACK button_anum (int panel, int control, int event,
+//************MARVYN 12/07/2021*************
+// fonction to load an initial configuration
+//******************************************
+int CVICALLBACK InitConfig (int panel, int control, int event,
 							 void *callbackData, int eventData1, int eventData2)
 {
 
-	char sProjectDir[MAX_PATHNAME_LEN];
-	int iRet=0;
 	int curseur_chaine=0;
 	int compteur_chaine=0;
 	int fin_chaine=0;
 	char config_name[MAX_PATHNAME_LEN]="";
-	 
+	char *anumConf;
+
 	
-	// Formation du chemin vers le répertoire des configurations
-	GetProjectDir(sProjectDir);
-	
-	
-	switch (event)
-	{
-		case EVENT_COMMIT:
-
-//MODIF MaximePAGES 1/07/2020 - Script Progres Bar E402 *******
-
-			ProgressBar_ConvertFromSlide(GiPanel,PANEL_MODE_PROGRESSBAR); //Initialization of the progress bar
-			ProgressBar_ConvertFromSlide(GiPanel,PANEL_MODE_PROGRESSBARSEQ); //Initialization of the seq progress bar
-			//SetCtrlAttribute (GiPanel, PANEL_MODE_PROGRESSBAR, ATTR_DISABLE_PANEL_THEME, 1);
-			//SetCtrlAttribute (GiPanel, PANEL_MODE_PROGRESSBARSEQ, ATTR_DISABLE_PANEL_THEME, 1);
-			//ProgressBar_SetAttribute (GiPanel,PANEL_MODE_PROGRESSBARSEQ , ATTR_PROGRESSBAR_BAR_COLOR,0x003399L );
-
-			// *******************MARVYN 15/06/2021************************************
-			 // code to load a initial ANum config file
-			// ************************************************************************
-			if (count_anum==0)
-			{
-			SetCtrlVal (panel, PANEL_MODE_LED1, 1);
-			SetCtrlVal (panel, PANEL_MODE_LED12, 0x0006B025);
-			SetCtrlVal (panel, PANEL_MODE_INDICATOR_CONFIG_ANUM,"Config_A172_Ph2_SW-2130.cfg");
-			strcpy(GsAnumCfgFile, "D:\\MarvynPANNETIER\\SetUp A172\\Config_A172_Ph2_SW-2130.cfg");
-			iAnumLoad=1;   // Condition pour le boutton Add script 
-			count_anum = 1;
-			}
-			else
-			{
-			//iAnumLoad=0;
-			//iRet = FileSelectPopup (sProjectDir, "*."".cfg", "", "", VAL_SELECT_BUTTON, 0, 1, 1, 0, GsAnumCfgFile);
-			iRet = FileSelectPopupEx (sProjectDir, "*.cfg", "", "", VAL_SELECT_BUTTON, 0, 1, GsAnumCfgFile);
-
-			
-			if(iRet > 0)
-			{
-				iAnumLoad=1;   // Condition pour le boutton Add script
-
-				//Récupération du nom de la config ANum
-				for(curseur_chaine=strlen(GsAnumCfgFile); fin_chaine==0 ; curseur_chaine--)
-				{
-					if( GsAnumCfgFile[curseur_chaine]=='\\' ) // search the separator folder\folder2\name
-					{
-						fin_chaine=1;
-						for( compteur_chaine=0; (curseur_chaine+compteur_chaine) < strlen(GsAnumCfgFile) ; compteur_chaine++)
-						{
-							config_name[compteur_chaine]=GsAnumCfgFile[curseur_chaine+compteur_chaine+1];
-						}
-					}
-				}
-				//display of the archive Anum config - a green led inform that an archive was loaded
-				SetCtrlVal (panel, PANEL_MODE_LED1, 1);
-				SetCtrlVal (panel, PANEL_MODE_LED12, 0x0006B025);
-				SetCtrlVal (panel, PANEL_MODE_INDICATOR_CONFIG_ANUM, config_name);
-
-			}
-			else  //0 VAL_NO_FILE_SELECTED
-			{
-				iAnumLoad=0;
-				strcpy(config_name, "");
-				strcpy(GsAnumCfgFile, "");
-				SetCtrlVal(panel,PANEL_MODE_INDICATOR_CONFIG_ANUM,"");
-				SetCtrlVal (panel, PANEL_MODE_LED1, 0);
-				SetCtrlVal (panel, PANEL_MODE_LED12, 0x00000000);
-				return 0;
-			}
-
-			break;
-			}	
-	}
-	return 0;
-}
-
-
-//***********************************************************************************************
-// Modif - Carolina 02/2019
-// Test with button select Data base - for ergonomic
-//***********************************************************************************************
-int CVICALLBACK  button_database (int panel, int control, int event,
-								 void *callbackData, int eventData1, int eventData2)
-{
-	char sProjectDir[MAX_PATHNAME_LEN];
-	int iRet;
 	int curseur_chaine2=0;
 	int compteur_chaine2=0;
 	int fin_chaine2=0;
+	char dirProject_name[MAX_PATHNAME_LEN]="";
+	char defaultDir[MAX_PATHNAME_LEN] = "D:\\";
+	char sProjectDir[MAX_PATHNAME_LEN];
+	int errDir=0;
+	int oldValue;
+	char *LD;
+	
 	char database_name[MAX_PATHNAME_LEN]="";
 	char sIFandIBthreshold[10]="";
-
+	char *DB;
 	int end = 1;
 	char range[30];
 	char parameterName[100];
 	char WUIDname[100];
-	char WUIDvalue[100];  
-
-
+	char WUIDvalue[100];
+	char range2[30];
+	
+	errDir = GetProjectDir(sProjectDir);
+	if(errDir == -1 || errDir == -2)
+		strcpy(sProjectDir, defaultDir);
+	
 	// Formation du chemin vers le répertoire des configurations
-	GetProjectDir(sProjectDir);
+	//GetProjectDir(sProjectDir);
 	
 	
-
 	switch (event)
 	{
 		case EVENT_COMMIT:
-
 			
-			if (count_database==0)
+			if (strcmp(configInit('A'),"\n") !=0 && strcmp(configInit('A'),"\0") !=0 )
 			{
-			iDataBaseLoad=1;   // Condition pour le boutton Add script 
-			count_database = 1;
+				
+			curseur_chaine=0;
+			compteur_chaine=0;
+			fin_chaine=0;
+			strcpy(config_name,"");	
+				
+		
+			ProgressBar_ConvertFromSlide(GiPanel,PANEL_MODE_PROGRESSBAR); //Initialization of the progress bar
+			ProgressBar_ConvertFromSlide(GiPanel,PANEL_MODE_PROGRESSBARSEQ); //Initialization of the seq progress bar
+		
 			
+			SetCtrlVal (panel, PANEL_MODE_LED1, 1);
+			SetCtrlVal (panel, PANEL_MODE_LED12, 0x0006B025);
+			SetCtrlVal (panel, PANEL_MODE_INDICATOR_CONFIG_ANUM,configName(configInit('A')));
+			anumConf=configInit('A');
+			anumConf[strlen(anumConf)-1]=NULL;
+			strcpy(GsAnumCfgFile, anumConf);
+			free(chaine);
+			iAnumLoad=1;   // Condition pour le boutton Add script 
+			}
+			
+			if (strcmp(configInit('L'),"\0") !=0 && strcmp(configInit('L'),"\n") !=0)
+			{
+				
+			curseur_chaine2=0;
+			compteur_chaine2=0;
+			fin_chaine2=0;
+			strcpy(dirProject_name,"");
+			errDir=0;   	
+			
+			GetProjectDir(GsResultsDirPath);
+			strcat(GsResultsDirPath, "\\"sREP_RESULTATS);
+			oldValue = SetBreakOnLibraryErrors (0);
+			MakeDir(GsResultsDirPath);  
+			SetBreakOnLibraryErrors (oldValue);
+			
+		
+			SetCtrlVal (panel, PANEL_MODE_LED3, 1);
+			SetCtrlVal (panel, PANEL_MODE_LED32, 0x0006B025); 
+			SetCtrlVal (panel, PANEL_MODE_INDICATOR_SET_LOG_DIR,configName(configInit('L')));
+			
+			LD=configInit('L');
+			//LD[strlen(LD)-1]=NULL;
+			//LD[strlen(LD)]='\0';
+			strcpy(GsLogPath, LD);
+			
+			//strcpy(GsLogPath, "D:\\MarvynPANNETIER\\Log_Dir");
+			
+			strcpy(GsLogPathInit,GsLogPath);
+			//free(chaine);
+			//printf("marvyn change : %s  \n",GsLogPath);
+			iSetLogDirLoad = 1;
+			}
+			
+			if (strcmp(configInit('D'),"\n") !=0 && strcmp(configInit('D'),"\0") !=0)
+			{
+				
+			curseur_chaine2=0;
+			compteur_chaine2=0;
+			fin_chaine2=0;
+		    strcpy(database_name,"");
+			strcpy(sIFandIBthreshold,"");	
+			nbParameter=0;
+			
+			iDataBaseLoad=1;   // Condition pour le boutton Add script 
 			
 			SetWaitCursor (1);
 				//display of the archive database - a green led inform that an archive was loaded
 				SetCtrlVal (panel, PANEL_MODE_LED2, 1);
 				SetCtrlVal (panel, PANEL_MODE_LED22, 0x0006B025); 
-				SetCtrlVal (panel, PANEL_MODE_INDICATOR_DATABASE,"Database A172 SW2130 - Copie2.xlsx");
+				SetCtrlVal (panel, PANEL_MODE_INDICATOR_DATABASE,configName(configInit('D')));
 				ExcelRpt_ApplicationNew(VFALSE,&applicationHandleProject);
-				strcpy(GsCheckCfgFile, "D:\\MarvynPANNETIER\\SetUp A172\\Database A172 SW2130 - Copie2.xlsx"); 
-
+				DB=configInit('D');
+				DB[strlen(DB)-1]=NULL;
+				strcpy(GsCheckCfgFile, DB); 
+				free(chaine); 
 
 				//MODIF MaximePAGES 03/07/2020 - E003 ***********************************
 				ExcelRpt_WorkbookOpen (applicationHandleProject, GsCheckCfgFile, &workbookHandledata);
@@ -15859,6 +16866,7 @@ int CVICALLBACK  button_database (int panel, int control, int event,
 				ExcelRpt_GetCellValue (worksheetHandledata1, "N2", CAVT_CSTRING, sIFandIBthreshold);
 				IFandIBthreshold = atoi(sIFandIBthreshold);
 
+				
 				//Modif MaximePAGES 31/07/2020 - generate a tab of parameters from Database
 				//we save all parameters (name, value, unit) inside a tab
 				for(int row=2; end==1; row++)
@@ -15874,9 +16882,13 @@ int CVICALLBACK  button_database (int panel, int control, int event,
 					{
 						nbParameter++;
 					}
-
+					
 				}
-
+			
+				nbParameter++;
+			//	printf("nb = %d\n",nbParameter);
+			//	nbParameter++;
+			//	printf("nb = %d\n",nbParameter);  
 				myParameterTab = malloc (nbParameter * sizeof (struct Parameter));
 
 				generateParameterTab (worksheetHandledata2) ;
@@ -15891,12 +16903,135 @@ int CVICALLBACK  button_database (int panel, int control, int event,
 				myListProcExcelPID = initialisationList(); // we initialize the list of PID excel
 				//***********************************************************************
 				SetWaitCursor (0);
-			
 			}
-			else 
-			{
-				
 			
+			break;
+			}
+			return 0;
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//***********************************************************************************************
+// Modif - Carolina 02/2019
+// Test with button select Anum config - for ergonomic
+//***********************************************************************************************
+int CVICALLBACK button_anum (int panel, int control, int event,
+							 void *callbackData, int eventData1, int eventData2)
+{
+
+	char sProjectDir[MAX_PATHNAME_LEN];
+	int iRet=0;
+	int curseur_chaine=0;
+	int compteur_chaine=0;
+	int fin_chaine=0;
+	char config_name[MAX_PATHNAME_LEN]="";
+	char *anumConf;
+	
+	// Formation du chemin vers le répertoire des configurations
+	GetProjectDir(sProjectDir);
+	
+	
+	switch (event)
+	{
+		case EVENT_COMMIT:
+
+//MODIF MaximePAGES 1/07/2020 - Script Progres Bar E402 *******
+
+			ProgressBar_ConvertFromSlide(GiPanel,PANEL_MODE_PROGRESSBAR); //Initialization of the progress bar
+			ProgressBar_ConvertFromSlide(GiPanel,PANEL_MODE_PROGRESSBARSEQ); //Initialization of the seq progress bar
+			//SetCtrlAttribute (GiPanel, PANEL_MODE_PROGRESSBAR, ATTR_DISABLE_PANEL_THEME, 1);
+			//SetCtrlAttribute (GiPanel, PANEL_MODE_PROGRESSBARSEQ, ATTR_DISABLE_PANEL_THEME, 1);
+			//ProgressBar_SetAttribute (GiPanel,PANEL_MODE_PROGRESSBARSEQ , ATTR_PROGRESSBAR_BAR_COLOR,0x003399L );
+
+		
+			//iAnumLoad=0;
+			//iRet = FileSelectPopup (sProjectDir, "*."".cfg", "", "", VAL_SELECT_BUTTON, 0, 1, 1, 0, GsAnumCfgFile);
+			iRet = FileSelectPopupEx (sProjectDir, "*.cfg", "", "", VAL_SELECT_BUTTON, 0, 1, GsAnumCfgFile);
+
+			
+			if(iRet > 0)
+			{
+				iAnumLoad=1;   // Condition pour le boutton Add script
+
+				//Récupération du nom de la config ANum
+				for(curseur_chaine=strlen(GsAnumCfgFile); fin_chaine==0 ; curseur_chaine--)
+				{
+					if( GsAnumCfgFile[curseur_chaine]=='\\' ) // search the separator folder\folder2\name
+					{
+						fin_chaine=1;
+						for( compteur_chaine=0; (curseur_chaine+compteur_chaine) < strlen(GsAnumCfgFile) ; compteur_chaine++)
+						{
+							config_name[compteur_chaine]=GsAnumCfgFile[curseur_chaine+compteur_chaine+1];
+						}
+					}
+				}
+				//display of the archive Anum config - a green led inform that an archive was loaded
+				SetCtrlVal (panel, PANEL_MODE_LED1, 1);
+				SetCtrlVal (panel, PANEL_MODE_LED12, 0x0006B025);
+				SetCtrlVal (panel, PANEL_MODE_INDICATOR_CONFIG_ANUM, config_name);
+
+			}
+			else  //0 VAL_NO_FILE_SELECTED
+			{
+				iAnumLoad=0;
+				strcpy(config_name, "");
+				strcpy(GsAnumCfgFile, "");
+				SetCtrlVal(panel,PANEL_MODE_INDICATOR_CONFIG_ANUM,"");
+				SetCtrlVal (panel, PANEL_MODE_LED1, 0);
+				SetCtrlVal (panel, PANEL_MODE_LED12, 0x00000000);
+				return 0;
+			}
+
+			break;
+				
+	}
+	return 0;
+}
+
+
+//***********************************************************************************************
+// Modif - Carolina 02/2019
+// Test with button select Data base - for ergonomic
+//***********************************************************************************************
+int CVICALLBACK  button_database (int panel, int control, int event,
+								 void *callbackData, int eventData1, int eventData2)
+{
+	char sProjectDir[MAX_PATHNAME_LEN];
+	int iRet;
+	int curseur_chaine2=0;
+	int compteur_chaine2=0;
+	int fin_chaine2=0;
+	char database_name[MAX_PATHNAME_LEN]="";
+	char sIFandIBthreshold[10]="";
+	char *DB="";
+	int end = 1;
+	char range[30];
+	char range2[30];
+	char parameterName[100];
+	char WUIDname[100];
+	char WUIDvalue[100];  
+
+
+	// Formation du chemin vers le répertoire des configurations
+	GetProjectDir(sProjectDir);
+	
+	
+
+	switch (event)
+	{
+		case EVENT_COMMIT:
+
+			
+		
 			nbParameter = 0;
 			//free(myParameterTab);
 
@@ -16026,6 +17161,8 @@ int CVICALLBACK  button_database (int panel, int control, int event,
 				ExcelRpt_GetCellValue (worksheetHandledata1, "N2", CAVT_CSTRING, sIFandIBthreshold);
 				IFandIBthreshold = atoi(sIFandIBthreshold);
 
+				
+				
 				//Modif MaximePAGES 31/07/2020 - generate a tab of parameters from Database
 				//we save all parameters (name, value, unit) inside a tab
 				for(int row=2; end==1; row++)
@@ -16043,10 +17180,11 @@ int CVICALLBACK  button_database (int panel, int control, int event,
 					}
 
 				}
-
+			
+				nbParameter++;
 				myParameterTab = malloc (nbParameter * sizeof (struct Parameter));
 
-				generateParameterTab (worksheetHandledata2) ;
+				generateParameterTab(worksheetHandledata2) ;
 
 				SetCtrlAttribute (GiPanel, PANEL_MODE_TABLE_SCRIPT, ATTR_LABEL_COLOR , 	VAL_LT_GRAY);
 
@@ -16055,6 +17193,7 @@ int CVICALLBACK  button_database (int panel, int control, int event,
 
 				//MODIF MaximePAGES 23/06/2020 - E002 ***********************************
 				databasePID = returnLastExcelPID();  // we save the DataBase Excel PID for later
+				printf("database PID = %d\n",databasePID);
 				myListProcExcelPID = initialisationList(); // we initialize the list of PID excel
 				//***********************************************************************
 				SetWaitCursor (0);
@@ -16085,7 +17224,7 @@ int CVICALLBACK  button_database (int panel, int control, int event,
 
 			break;
 		
-			}
+			
 	}
 
 	return 0;
@@ -16110,7 +17249,8 @@ int CVICALLBACK button_set_log_dir (int panel, int control, int event,
 	char sProjectDir[MAX_PATHNAME_LEN];
 	int iRet = 0, errDir=0;
 	int oldValue;
-
+	char *LD;
+	
 	errDir = GetProjectDir(sProjectDir);
 	if(errDir == -1 || errDir == -2)
 		strcpy(sProjectDir, defaultDir);
@@ -16127,21 +17267,7 @@ int CVICALLBACK button_set_log_dir (int panel, int control, int event,
 			MakeDir(GsResultsDirPath);  
 			SetBreakOnLibraryErrors (oldValue);
 			
-			if (count_logdir ==0)
-			{
-			
-			SetCtrlVal (panel, PANEL_MODE_LED3, 1);
-			SetCtrlVal (panel, PANEL_MODE_LED32, 0x0006B025); 
-			SetCtrlVal (panel, PANEL_MODE_INDICATOR_SET_LOG_DIR,"log dir");
-			strcpy(GsLogPath, "d:\\MarvynPANNETIER\\log dir");
-			strcpy(GsLogPathInit,GsLogPath);
-		//	printf("marvyn change : %s  \n",GsLogPath);
-			
-			count_logdir  = 1;	
-			iSetLogDirLoad = 1;
-			}
-			else
-			{
+		
 			iRet = 	DirSelectPopupEx(sProjectDir, "Select Log Directory", GsLogPath);
 			//printf("initial code : %s  \n",GsLogPath);      
 			//iRet = DirSelectPopup (sProjectDir, "Select Log Directory", 1, 1, GsLogPath);
@@ -16179,7 +17305,7 @@ int CVICALLBACK button_set_log_dir (int panel, int control, int event,
 				return 0;
 			}
 			break;
-			}
+			
 	}
 	return 0;
 }
@@ -16336,6 +17462,7 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 						//Open Script definition windows
 						add_expected_results();
 						insertSteps = 0 ;
+						modifySteps =0;
 
 						//Modif MaximePAGES 10/08/2020 ***************
 						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_VALUE, ValueTxt_Callback, 0);
@@ -16343,7 +17470,7 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_TOLERENCE1, TolPerTxt_Callback, 0);
 						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_VALUEFC, FunctionCodeTxt_Callback, 0);
 						//********************************************
-
+					
 
 						break;
 						
@@ -16355,6 +17482,7 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 						}
 					    //MARVYN 23/06/2021
 						insertSteps = 1;
+						modifySteps =0;
 						numRow = rect.top ;
 						couleurSelection(numRow,PANEL_MODE_EXP_RESULTS,panel,VAL_LT_GRAY );
 						//********
@@ -16368,6 +17496,28 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_VALUEFC, FunctionCodeTxt_Callback, 0);
 						
 					break;	
+					
+					case MENUEXP_MAIN_MODIFY:
+						//Open Script definition windows
+						if(!CheckPrecondition())
+						{
+							return 0;
+						}
+						numRow = rect.top ;
+						tableHeight = rect.height ;
+						modifySteps =1;
+						insertSteps = 0; 
+						couleurSelection(numRow,PANEL_MODE_EXP_RESULTS, panel,VAL_LT_GRAY )  ;
+						add_expected_results();
+						modifyStepExpResult(numRow);
+						
+						//Modif MaximePAGES 10/08/2020 ***************
+						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_VALUE, ValueTxt_Callback, 0);
+						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_TOLERENCE2, TolTxt_Callback, 0);
+						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_TOLERENCE1, TolPerTxt_Callback, 0);
+						InstallCtrlCallback (GiExpectedResultsPanel, EXPRESULTS_VALUEFC, FunctionCodeTxt_Callback, 0);
+						//********************************************
+					break; 
 
 					case MENUEXP_MAIN_DELETE:
 						if(iNumberOfRows == 0)
@@ -16376,6 +17526,7 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 						}
 						else
 						{
+							//printf("%d %d \n",rect.top, rect.height);
 							//DeleteTableRows (panelHandle, tableCtrl, index, numToDelete); //Programming with Table Controls
 							DeleteTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, rect.top, rect.height);
 						}
@@ -16456,6 +17607,17 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 						ExcelRpt_GetWorksheetFromIndex(workbookHandleLoad, 2, &worksheetHandleLoad);
 						ExcelRpt_GetCellValue (worksheetHandleLoad, "I1", CAVT_INT,&EndBoucle);
 
+						
+						if ( pathName[strlen(pathName)-1] != 25  ) 
+						{
+						DeleteTableRows (panel, PANEL_MODE_SCRIPTS_DETAILS, 1, -1);
+						*pointeurval=0;	// remet a 0 le compteur de ligne du tableau
+							
+					
+						DeleteTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, 1, -1);
+						*PointeurNbRowsExpR=0;	// remet a 0 le compteur de ligne du tableau
+						}				  
+						
 						*PointeurNbRowsExpR= EndBoucle-1;
 
 						// charge chaque lignes du tableau
@@ -16602,6 +17764,8 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 int CVICALLBACK mode_creation (int panel, int control, int event,
 							   void *callbackData, int eventData1, int eventData2)
 {
+	
+
 	switch (event)
 	{
 			//	enable_create = 1;
@@ -17260,7 +18424,7 @@ int CVICALLBACK addexp (int panel, int control, int event,
 	//Type de valeur à verifier
 	char TypeValue[500] = "";
 	char TypeValue2[500] = "";
-	char auxTypeValue[500] = "";
+
 
 	char valueFC[50] = "";
 	char valueFC2[50] = "";
@@ -17283,15 +18447,60 @@ int CVICALLBACK addexp (int panel, int control, int event,
 	char function9[]="CheckNoRF";
 	char function10[]="CheckTimingFirstRF";
 
-	int nb = 0;
 
-	Point cell; //
+
+	Point cell; 
 
 	switch (event)
 	{
 		case EVENT_COMMIT:
-			//MARVYN 23/06/2021	
-			couleurSelection(numRow,PANEL_MODE_EXP_RESULTS,GiPanel,VAL_WHITE);
+			//MARVYN 23/06/2021
+		
+			
+	
+			if(insertSteps == 0 && modifySteps == 0)
+			{
+			InsertTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, -1, 1, VAL_USE_MASTER_CELL_TYPE);
+			*PointeurNbRowsExpR= *PointeurNbRowsExpR+1;
+			cell.y=*PointeurNbRowsExpR;
+			}
+			else if (insertSteps ==1)
+			{
+			
+				if ( numRow != 0 )
+				{
+				InsertTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, numRow, 1, VAL_USE_MASTER_CELL_TYPE);
+				*PointeurNbRowsExpR= *PointeurNbRowsExpR+1;
+				cell.y = numRow ;
+				
+				}
+				else 
+				{
+				InsertTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, -1, 1, VAL_USE_MASTER_CELL_TYPE);
+				*PointeurNbRowsExpR= *PointeurNbRowsExpR+1;
+				cell.y=*PointeurNbRowsExpR;
+				
+				}
+			}
+			else if (modifySteps == 1)
+			{
+				
+			cell.y = numRow ; 
+			//InsertTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, numRow, 1, VAL_USE_MASTER_CELL_TYPE);
+			//DeleteTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, numRow+1, tableHeight);
+			itemValue= commandExpResult  ;
+			}
+			
+			
+			if ( modifySteps == 1)
+			{
+			couleurSelection(numRow,PANEL_MODE_EXP_RESULTS,GiPanel,VAL_WHITE); 
+			}
+			else if (insertSteps == 1)
+			{
+			couleurSelection(numRow+1,PANEL_MODE_EXP_RESULTS,GiPanel,VAL_WHITE); 
+			}
+			
 			//************
 			DeleteListItem (GiExpectedResultsPanel, EXPRESULTS_FIELDCHECK, 0, -1);
 			//DeleteListItem (GiExpectedResultsPanel, EXPRESULTS_SELECTPARAM, 0, -1);
@@ -17367,22 +18576,13 @@ int CVICALLBACK addexp (int panel, int control, int event,
 			SetCtrlAttribute(panel,EXPRESULTS_WUID_VALUE,			ATTR_DIMMED,1);
 
 		
-			if (insertSteps == 0) 
+		
+			
+			if (modifySteps ==0)
 			{
-			InsertTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, -1, 1, VAL_USE_MASTER_CELL_TYPE);
-			
-			
-			cell.y=*PointeurNbRowsExpR;
-			}
-			else if (insertSteps ==1)
-			{
-			InsertTableRows (GiPanel, PANEL_MODE_EXP_RESULTS, numRow, 1, VAL_USE_MASTER_CELL_TYPE);  
-			cell.y = numRow ;
-			}
-			
-			*PointeurNbRowsExpR= *PointeurNbRowsExpR+1;
 			GetCtrlVal(panel,EXPRESULTS_EXPLIST, &itemValue);  // troisieme funcçao
-
+			}
+			
 			Valsequencevalue = 0;
 			Valonevalue = 0;
 			Valrangevalue = 0;
@@ -17397,7 +18597,7 @@ int CVICALLBACK addexp (int panel, int control, int event,
 					break;
 
 				case 1:  //CheckTimingInterFrames
-					cell.x=1;  //
+					cell.x=1;  
 					SetTableCellVal (GiPanel, PANEL_MODE_EXP_RESULTS, cell, function1);
 
 					cell.x=2;
@@ -17443,6 +18643,7 @@ int CVICALLBACK addexp (int panel, int control, int event,
 					GetCtrlVal(GiExpectedResultsPanel, EXPRESULTS_TAKEFIELD, itemSelected);
 					if(strcmp(itemSelected, noItemSelected) == 0) //no itens selected
 					{
+						if (modifySteps == 0)
 						//error
 						MessagePopup("Warning", "No field selected!");
 					}
@@ -18094,6 +19295,7 @@ int CVICALLBACK addexp (int panel, int control, int event,
 					
 					break;
 				case 10:   // CheckTimingFirstRF
+					FirstRF = 1;
 					cell.x=1;  //
 					SetTableCellVal (GiPanel, PANEL_MODE_EXP_RESULTS, cell, function10);
 
@@ -18180,6 +19382,19 @@ int CVICALLBACK addexp (int panel, int control, int event,
 					break;
 
 			}
+			
+		
+			//MARVYN 29/06/2021
+			//printf("lab1 = %s and lab2 = %s\n",labelname1,labelname2);
+			if (verifLabel(labelname1)==0)
+			{
+			MessagePopup ("Warning", "Label1 does not exist");
+			}
+			if (verifLabel(labelname2)==0 && FirstRF==0 )
+			{
+			MessagePopup ("Warning", "Label2 does not exist");
+			}
+			
 
 			//remise a zero des indicateurs
 			SetCtrlVal(GiExpectedResultsPanel,EXPRESULTS_LABEL1,		"");
@@ -18202,6 +19417,38 @@ int CVICALLBACK addexp (int panel, int control, int event,
 	return 0;
 }
 
+
+//MARVYN 30/06/2021
+//check if the Label exist to be sure to have something coherent 
+int verifLabel(char *label)
+{
+	Point cell;
+	//char *tab[100] ;
+	char sCellValue[200]="";
+	int find = 0;
+	int iNumberOfRows ; 
+	int iErr;
+	
+	iErr = GetNumTableRows (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, &iNumberOfRows);
+	cell.x = 3 ;
+	cell.y=1;
+	
+    for (int i=0;i<iNumberOfRows;i++)
+	{
+	GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
+	//printf("Label = %s\n",sCellValue);
+	if (strcmp(sCellValue,"SetA")!=0 && strcmp(sCellValue,"SetP")!=0 && strcmp(sCellValue,"SendLFD")!=0 && strcmp(sCellValue,"StopLFD")!=0 && strcmp(sCellValue,"SendLFCw")!=0 && strcmp(sCellValue,"StopLFCw")!=0 && strcmp(sCellValue,"LFPower")!=0 && strcmp(sCellValue,"Label")!=0 && strcmp(sCellValue,label) == 0 )
+	{
+	find = 1 ;	
+	}
+	cell.y++;
+	}
+	return find;
+
+}
+
+
+							
 //***********************************************************************************************
 // Modif - Carolina 03/2019
 //
@@ -18212,6 +19459,7 @@ int CVICALLBACK OkCallback (int panel, int control, int event,
 	switch (event)
 	{
 		case EVENT_COMMIT:
+			couleurSelection(numRow,PANEL_MODE_EXP_RESULTS,GiPanel,VAL_WHITE);           
 			HidePanel(GiExpectedResultsPanel);
 
 			DeleteListItem (GiExpectedResultsPanel, EXPRESULTS_FIELDCHECK, 0, -1);
@@ -18584,10 +19832,10 @@ int CVICALLBACK littlemsg (int panel, int control, int event,
 int CVICALLBACK addtol (int panel, int control, int event,
 						void *callbackData, int eventData1, int eventData2)
 {
-	int boucle=0, end=1;
-	char range[30]="";
-	char cond_end[100]="";
-	char ParameterName[100]="";
+
+
+
+
 
 	switch (event)
 	{
@@ -18670,10 +19918,10 @@ int CVICALLBACK addtol (int panel, int control, int event,
 int CVICALLBACK addtol_2 (int panel, int control, int event,
 						  void *callbackData, int eventData1, int eventData2)
 {
-	int boucle=0, end=1;
-	char range[30]="";
-	char cond_end[100]="";
-	char ParameterName[100]="";
+
+	
+
+
 
 	switch (event)
 	{
@@ -18758,10 +20006,10 @@ int CVICALLBACK addval (int panel, int control, int event,
 {
 
 
-	int  boucle=0, end=1;
-	char range[30]="";
-	char cond_end[100]="";
-	char ParameterName[100]="";
+
+
+
+
 	int itemValue =0;
 
 
@@ -18851,20 +20099,20 @@ int CVICALLBACK addval (int panel, int control, int event,
 int CVICALLBACK insertformule (int panel, int control, int event,
 							   void *callbackData, int eventData1, int eventData2)
 {
-	int i=0;
-	char Formule[500]="";
-	const char s[2] = " "; //space
-	char *token;
-	char *tabtoken[200] = {NULL};
-	char range[30];
-	char ParameterName[100];
-	char Value[100];
-	char *TabValue[100] = {NULL};
-	char defaultDirectory[MAX_PATHNAME_LEN] = "D:\\CalculationFile.xlsx";
-	int boucle;
-	int end;
-	int StringEqual=0;
-	BOOL bParam = FALSE;
+
+
+
+	
+	
+	
+
+
+	
+	
+;
+	
+
+
 	//int parameterCompare2;
 	char Formule2[500]="";
 	char Formule2withoutVariable[500]="";
@@ -19441,14 +20689,14 @@ int CVICALLBACK wuid_fonction_exp (int panel, int control, int event,
 int CVICALLBACK selectparam (int panel, int control, int event,
 							 void *callbackData, int eventData1, int eventData2)
 {
-	char range[30];
+	
 	char valueParameter[100];
 	char unitParameter[100];
-	char Param[500]="";
-	char sValue[500]="";
+
+
 	char Formula[500]="";
-	int iValue=0;
-	int ListIndex=0;
+	
+
 	int itemValue=0;
 	/*
 	switch (event)
@@ -20359,7 +21607,7 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 						// Enregistrement sur le tableau excel par ligne
 						for( boucle1 =1; boucle1 <= *pointeurval; boucle1++)
 						{
-
+							printf("i am in script loop \n");
 							//taking time and duration
 							cell.y = boucle1;
 							cell.x =1;
@@ -20515,6 +21763,7 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 						// Enregistrement sur le tableau excel par ligne
 						for( boucle2 = 1; boucle2 <= *PointeurNbRowsExpR; boucle2++)
 						{
+							printf("i am in exp loop\n");
 							cell.y = boucle2;
 							cell.x =1;
 							sprintf(range,"A%d",boucle2+1);
@@ -20582,7 +21831,7 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 				//save file
 				//ExcelRpt_ApplicationQuit(applicationHandlesave);
 				//CA_DiscardObjHandle(applicationHandlesave);
-
+				//printf("i am here \n");
 				// fermeture d'excel
 				ExcelRpt_WorkbookClose (workbookHandle8, 0);
 				//ExcelRpt_ApplicationQuit (applicationHandle8);
@@ -20715,6 +21964,60 @@ void killAllProcExcel(List *listPIDexcel)
 
 }
 
+//MARVYN 09/07/2021 
+int PathSpaces(char *string)
+{
+	char *aux="#";
+	strcat(aux,string);
+	strcpy(string,aux);
+	string[strlen(string)]='#';
+	
+	return 0;
+}
+
+
+
+/*//MARVYN 09/07/2021
+int replaceSpaces(char *string)
+{
+	int lenght = strlen(string);
+	char aux[500];
+	//µprintf("string[0] = %c",string[0]);
+	for (int i=0;i<lenght;i++)
+	{
+		//printf("string = %s\n",string);
+		if (string[i]==' ')
+		{
+		  if ( i == lenght-1)
+		  {
+			  printf("we are in the else");
+			  string[i]=NULL;
+		  }
+		  else
+		  {
+			  printf("strlen = %d\n",lenght-i);
+			  for (int y=0;y<lenght-i;y++)
+			  {
+			//	  printf("strlen = %d\n",lenght-i-1);
+			//	  printf("y = %d",y);
+			//	  printf("\n string = %c\n",string[i+1+y]);
+				  aux[y]=string[i+1+y];
+			  }
+			aux[y+1]='\0';
+			string[i]='\\';
+			string[i+1]=' ';
+			string[i+2]=NULL;
+			printf("string = %s\n",string);
+			printf("aux = %s\n",aux);
+			strcat(string,aux);
+			printf("string = %s\n",string);
+			lenght = strlen(string);
+			i++;
+		  }
+		}
+	}
+	return 0;
+} */
 
 // functions that manage PIDs process
 int returnLastExcelPID()
@@ -20729,9 +22032,11 @@ int returnLastExcelPID()
 
 	GetProjectDir(myfilepath);
 	strcat(myfilepath,"\\ExcelTasksPID.txt"); //we define  the name of the file
-
+	//PathSpaces(myfilepath);
+	//printf("path = %s\n",myfilepath);
 	strcat(mycmd,myfilepath);
-	WinExec(mycmd, SW_HIDE); //we creat a txt file with the list of PID excel process
+	//printf("cmd = %s\n",mycmd);
+	WinExec(mycmd, SW_HIDE); //we create a txt file with the list of PID excel process
 	Sleep(500);  // we wait 500ms to acquire the information from the file
 
 
@@ -20754,10 +22059,12 @@ int returnLastExcelPID()
 void killPIDprocess(int pid)
 {
 	char mycmd[150] = "";
-	sprintf(mycmd,"cmd.exe /c taskkill /PID \"%d\" /F",pid);
+	sprintf(mycmd,"cmd.exe /c taskkill /F /PID %d",pid);
+	printf("mycmd = %s",mycmd);
 	WinExec(mycmd, SW_HIDE);
 
 }
+
 //*****************************************************************************************************
 
 
@@ -21193,7 +22500,7 @@ int CheckCompareP(char * wuID, double dtolValue, double dtolpercent)
 	char CheckGoodsum[15] = 	"/ROW/@CKSGood";
 	char CheckRTime[15] = 		"/ROW/@_RTime";
 	char CheckPressure[15] = 		"/ROW/@Pressure";
-	char CheckRotSpeed[15] = 	"/ROW/@RotSpeed";
+	
 	char CheckDesc[15] = 	"/ROW/@Desc";
 	char CKSGood[3] = "";
 	char _ATimeColumn[255] = "";
@@ -21212,13 +22519,13 @@ int CheckCompareP(char * wuID, double dtolValue, double dtolpercent)
 	char cellGoodSumRange[30] = "";
 	char RTime[30] = "";
 	char Pressure[30] = "";
-	char RotSpeed[30] = "";
+
 	char Desc[30] = "";
-	char cellFCRange[30] = "";
-	char *CheckParamFC;
+	
+	
 
 
-	double  auxtime = 0.0,  dValueMax=0.0, dValueMin = 0.0, dValueMaxperc = 0.0, dValueMinperc = 0.0;
+	double dValueMax=0.0, dValueMin = 0.0, dValueMaxperc = 0.0, dValueMinperc = 0.0;
 	char percent[4]="[%]";
 
 
@@ -21237,7 +22544,7 @@ int CheckCompareP(char * wuID, double dtolValue, double dtolpercent)
 
 	int CKSGoodvalid = 0;
 	int CKSGoodinvalid = 0;
-
+	int noLab=0;
 
 	int m=1;
 
@@ -21304,10 +22611,31 @@ int CheckCompareP(char * wuID, double dtolValue, double dtolpercent)
 	else
 		strcpy(cellWUIDRange, tokenWUID);
 	
-
+	// AJOUT Marvyn 13/07/2021
 	if(token1 != NULL && token2 != NULL && token3 != NULL && token4 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+		if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Tolerance value: %f\n", 	dtolValue);
 		fprintf(file_handle, "Tolerance %s: %f\n\n",	percent, dtolpercent);
 
@@ -21319,7 +22647,7 @@ int CheckCompareP(char * wuID, double dtolValue, double dtolpercent)
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
 			//starting check when label1 was found
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(i = boucle+1 ; endCondition == 1; i++)
@@ -21485,6 +22813,8 @@ int CheckCompareP(char * wuID, double dtolValue, double dtolpercent)
 
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition of check
 					{
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -21494,6 +22824,8 @@ int CheckCompareP(char * wuID, double dtolValue, double dtolpercent)
 
 						endCondition = 0; //stop ckeck
 						end = 0;
+						}
+						noLab=1;
 					}
 
 				}
@@ -21530,12 +22862,12 @@ int CheckCompareAcc(char * wuID, char * value, double dtolValue, double dtolperc
 	char CheckGoodsum[15] = 	"/ROW/@CKSGood";
 	char CheckRTime[15] = 		"/ROW/@_RTime";
 	char CheckASpeed[15] = 		"/ROW/@ASpeed";
-	char CheckRotSpeed[15] = 	"/ROW/@RotSpeed";
+
 	char CheckAcc[30] = 		"/ROW/@Acceleration";
 	char CheckWUID[30] = 		"/ROW/@ID"; 
 	char CKSGood[3] = "";
 	char _ATimeColumn[255] = "";
-	char _DescColumn[255] = "";
+	
 	char _RTimeColumn[255] = "";
 	char _AccColumn[255] = "";
 	char _ASpeedColumn[255] = "";
@@ -21543,7 +22875,7 @@ int CheckCompareAcc(char * wuID, char * value, double dtolValue, double dtolperc
 	char rangeA[30] = "";
 	char RTimeRange[30]="";
 	char GoodSumRange[30] = "";
-	char DescRange[30] = "";
+	
 	char AccRange[30] = "";
 	char ASpeedRange[30] = "";
 	char WUIDRange[30] = ""; 
@@ -21556,32 +22888,32 @@ int CheckCompareAcc(char * wuID, char * value, double dtolValue, double dtolperc
 	char RTime[30] = "";
 	char ASpeed[30] = "";
 	char WUID[30] = ""; 
-	char RotSpeed[30] = "";
+	
 	char Acc[30] = "";
-	char cellFCRange[30] = "";
-	char *CheckParamFC;
+	int noLab=0;
+	
 
 
-	double  auxtime = 0.0,  dValueMax=0.0, dValueMin = 0.0, dValueMaxperc = 0.0, dValueMinperc = 0.0;
+	double dValueMax=0.0, dValueMin = 0.0, dValueMaxperc = 0.0, dValueMinperc = 0.0;
 	char percent[4]="[%]";
 
 
 	//AJOUT MaximePAGES
-	double postDruckRTime = 0.0;
-	double preDruckRTime = 0.0;
-	double postDruckPressure= 0.0;
-	double preDruckPressure = 0.0;
+
+
+
+	
 
 	double RFRTime = 0.0;
 	double RFAcc = 0.0;
 	double RFASpeed = 0.0;
 	double RFASpeed_g = 0.0;
-	double RFPressureInterpol = 0.0;
+	
 
-	int postDruckFound = 0;
-	int preDruckFound = 0;
 
-	int m=1;
+	
+
+	
 	double wheeldim = 0;
 	double m_pi = 3.14159265358;
 
@@ -21665,7 +22997,28 @@ int CheckCompareAcc(char * wuID, char * value, double dtolValue, double dtolperc
 
 	if(token1 != NULL && token2 != NULL && token3 != NULL && token4 != NULL && tokenWUID != NULL)
 	{
-		fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			if (lab2 == 0)
+		{
+			if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and %s (%d ms)\n", 	label1, Time1, label2, Time2);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and %s (%d ms)\n", label2, Time2);
+			}
+		}
+		else
+		{
+		   	if (lab1 == 0)
+			{
+			fprintf(file_handle, "Between %s (%d ms) and the end of the script\n", 	label1, Time1);
+			}
+			else
+			{
+			fprintf(file_handle, "Between the beginning and the end of the script\n");
+			}
+		}
 		fprintf(file_handle, "Tolerance value: %f\n", 	dtolValue);
 		fprintf(file_handle, "Tolerance %s: %f\n\n",	percent, dtolpercent);
 
@@ -21677,7 +23030,7 @@ int CheckCompareAcc(char * wuID, char * value, double dtolValue, double dtolperc
 			ExcelRpt_GetCellValue (worksheetHandle9, rangeA, CAVT_CSTRING, _ATimeColumn);
 
 			//starting check when label1 was found
-			if(strcmp(label1, _ATimeColumn) == 0)
+			if(strcmp(label1, _ATimeColumn) == 0 || lab1==1)
 			{
 				//analyse until find label 2
 				for(i = boucle+1 ; endCondition == 1; i++)
@@ -21781,7 +23134,8 @@ int CheckCompareAcc(char * wuID, char * value, double dtolValue, double dtolperc
 
 					if(strcmp(label2, _ATimeColumn) == 0)   //stop condition of check
 					{
-						
+						if (noLab == 1 || FirstLab==1  || TwoLabs==1)
+						{
 						if(zerofound == 1)
 						{
 							float percentageCKSGood = ((double)CKSGoodinvalid/( (double)CKSGoodinvalid+ (double)CKSGoodvalid))*100.0;
@@ -21790,6 +23144,8 @@ int CheckCompareAcc(char * wuID, char * value, double dtolValue, double dtolperc
 
 						endCondition = 0; //stop ckeck
 						end = 0;
+						}
+						noLab=1;
 					}
 
 
@@ -22229,20 +23585,20 @@ char * parameterToValue_Str (char * formula)
 {
 
 	char valueReturned[200]= "";
-	int i=0;
-	int valueDebug = 0;
+
+
 	char Formula[500]="";
 	const char s[2] = " ";
 	char *token;
-	char *tabtoken[200] = {NULL};
-	char range[30];
-	char parameter[100]="";
+
+	
+
 	char unitParameter[50]="";
 	char valueParameter[25]="";
-	char Value[100];
-	char *TabValue[100] = {NULL};
-	int boucle=0;
-	int end;
+	
+	
+	
+
 	int StringEqual=0;
 	int charInsideParam=0;
 	BOOL bParam = FALSE;
@@ -22358,8 +23714,8 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 
 	int iTime = 0;
 	int iDuration = 0;
-	float fTime = 0.0;
-	float fDuration = 0.0;
+	
+	
 	char sTime[100]= ""; 
 	char sDuration[100]= ""; 
 	
@@ -22368,25 +23724,25 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 	char WUIDnameFromDatabase[100]; 
 	int end=1;
 
-	float fValue = 0.0;
-	float fRange1 = 0.0;
-	float fRange2 = 0.0;
+
+
+
 	char sRange1[100] = "";
 	char sRange2[100] = "";
 	
 	char sValue[100];
-	char auxsValue[100];
-	char * tabValue[20];
 
-	float fTol = 0.0;
+	
+
+
 	char sTol[100]= ""; 
 
-	float fTolp = 0.0;
+
 	char sTolp[100]= ""; 
 
 	char sElement[100];
 	char *token;
-	const char s[2] = ";";
+	
 
 	char range[30];
 	char rangewuid[30];
@@ -22552,7 +23908,7 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 
 //*****************************************************************************************************
 // MODIF MaximePAGES 31/07/2020 - Function to generate a tab of parameters from Database
-
+// MODIF MarvynPANNETIER 13/072021
 void generateParameterTab (CAObjHandle worksheetHandle)
 
 {
@@ -22560,10 +23916,10 @@ void generateParameterTab (CAObjHandle worksheetHandle)
 	char range1[30];
 	char range2[30];
 	char range3[30];
-	float tempValue = 0.0;
+	
+	
 
-
-	for(int row=2; row <= nbParameter+1; row++)
+	for(int row=2; row <= nbParameter; row++)
 	{
 		sprintf(range1,"A%d",row);
 		ExcelRpt_GetCellValue (worksheetHandle, range1, CAVT_CSTRING, myParameterTab[row-2].name);
@@ -22574,25 +23930,21 @@ void generateParameterTab (CAObjHandle worksheetHandle)
 		sprintf(range3,"C%d",row);
 		ExcelRpt_GetCellValue (worksheetHandle, range3, CAVT_CSTRING, myParameterTab[row-2].unit);
 
-		/*
-		if(strcmp(myParameterTab[row-2].unit, "[ms]") == 0)
-		{
-			tempValue = atof(myParameterTab[row-2].value);
-			tempValue = tempValue/1000;
-			sprintf(myParameterTab[row-2].value,"%.5f",tempValue);
-			sprintf(myParameterTab[row-2].unit,"%s","[s]");
-		}
-		*/
-
-
-
+		printf("name = %s\nvalue = %s\nunit = %s\n ROW = %d\n\n",myParameterTab[row-2].name,myParameterTab[row-2].value,myParameterTab[row-2].unit,row-2);
+		
 		if(strcmp(myParameterTab[row-2].name, "") == 0)
 		{
 			end=0;  //the end was found
 		}
+		
 	}
-
-
+	//printf("ROW = %d and name = %s\n",row-2,myParameterTab[row-2].name);
+	strcpy(myParameterTab[row-2].name,"Continuous");
+	strcpy(myParameterTab[row-2].value,"0");
+	strcpy(myParameterTab[row-2].unit,"Send Frame - Nb of Frames");   
+		
+	printf("name = %s\nvalue = %s\nunit = %s\n ROW = %d\n\n",myParameterTab[row-2].name,myParameterTab[row-2].value,myParameterTab[row-2].unit,row-2);
+	 
 }
 
 //*****************************************************************************************************
@@ -23395,17 +24747,17 @@ int CheckPreSTDEV(char * wuID, char *Value, char *sFrameNb, char *sAngleEmission
 	char Angle_position[100] =  "/ROW/@Angle_position";
 	char FrameNBRow[30] = "";
 	char Angle_position_Row[30] = "";
-	double iValue = 0.0;
+	
 	char iFrameNB[5] = "";
 	char varFramNumber[5] = "";
 	char varAnglePosition[5] = "";
 	//char varAngle_position[30] = "";
 	char auxAngleEmission[10] = "";
 	int iAngleEmission = 0;
-	int iAnglePosition = 0;  
-	double result = 0.0;
+	 
+
 	int failResult = 0;
-	int itest = 0;
+
 	double dRange1 = 0.0, dRange2;
 
 	int CKSGoodvalid = 0;
@@ -23764,10 +25116,10 @@ int CVICALLBACK button_testscript (int panel, int control, int event,
 	int compteur_chaine2=0;
 	int fin_chaine2=0;
 	char testscript_name[MAX_PATHNAME_LEN]="";
-	char sIFandIBthreshold[10]="";
+	
 
-	int end = 1;
-	char range[30];
+	
+	
 
 
 
@@ -23852,10 +25204,10 @@ int CVICALLBACK button_testfolder (int panel, int control, int event,
 {
 
 	int curseur_chaine2=0;
-	int compteur_chaine2=0;
-	int fin_chaine2=0;
+	
+	
 	char testfolder_name[MAX_PATHNAME_LEN]="";
-	char tempDir[MAX_PATHNAME_LEN]=""; 
+	
 	char defaultDir[MAX_PATHNAME_LEN] = "D:\\";
 	char sProjectDir[MAX_PATHNAME_LEN];
 	int iRet = 0, errDir=0;
@@ -23932,10 +25284,10 @@ int CVICALLBACK button_analyse (int panel, int control, int event,
 	char * newCurrentTestName;
 													  
 	
-	char ProjectDirectory[MAX_PATHNAME_LEN];
-	char *confpath;
+	
+	
 	char newfolder[MAX_PATHNAME_LEN];
-	int iRet=0;
+	
 	int oldValue;
 	SYSTEMTIME t;
 
@@ -23972,5 +25324,67 @@ int CVICALLBACK button_analyse (int panel, int control, int event,
 }
 
 
+//Marvyn 12/07/2021
+char* configInit(char type)
+{
+	FILE* fichier = NULL;
+	chaine=malloc(1000*sizeof(char));;
+	char *token=malloc(1000*sizeof(char));
+	fichier = fopen("../initial_configurations.txt","r");
+	int counter = 0;
+	  if (fichier != NULL)
+    {
+        while(fgets(token,1000,fichier)!=NULL)
+		{   
+			strtok(token,"=");
+			if ( token[0] == type && token[1] != ':' )
+			{
+			//printf("type =%c\n",type);
+			while( token != NULL )
+			{
+				strcpy(chaine,token);
+				token=strtok(NULL, "=");
+				counter++;
+			}
+			//printf("%s\n",chaine);
+			free(token);
+			token=malloc(1000*sizeof(char));
+			}
+		}
+		
+    }
+    else
+    {
+        // On affiche un message d'erreur si on veut
+        printf("Impossible to open the file");
+    }
+    free(token);
+	fclose(fichier);
+	//printf("%s\n",chaine);
+	if (counter >1)
+	{
+	return chaine;
+	}
+	else
+	{
+	chaine = "";
+	return chaine ;
+	}
+}
+
+char* configName(char *path)
+{
+//	char *token=malloc(300*sizeof(char));
+	char name[1000]="";
+	strtok(path,"\\");
+	while (path != NULL)
+	{
+		strcpy(name,path);
+		path=strtok(NULL,"\\");
+		
+	}
+//	free(token);
+	return name;
+}
 
 	
