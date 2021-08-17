@@ -311,20 +311,20 @@ void printCheckResults(FILE * file_handle, char * functionName , int valueReturn
 ////////////////////////////////////////////////////////////////////////////////  
 //** CheckCompareP : fonction check qui compare les valeurs de pression 
 // envoyées par le capteur avec celles du banc LSE 
-int CheckCompareP(char * wuID,double dtolValue, double dtolpercent);
+int CheckCompareP(char * wuID,double dtolValue, double dtolpercent, char *Param, char* InterfacetoCheck);
 //////////////////////////////////////////////////////////////////////////////// 
 
 
 ////////////////////////////////////////////////////////////////////////////////  
 //** CheckCompareAcc : fonction check qui compare les valeurs d'acceleration
 // envoyées par le capteur avec celles du banc LSE 
-int CheckCompareAcc(char * wuID,char * value, double dtolValue, double dtolpercent);
+int CheckCompareAcc(char * wuID,char * value, double dtolValue, double dtolpercent, char *FCParam, char* InterfacetoCheck);
 ////////////////////////////////////////////////////////////////////////////////  
 
 
 ////////////////////////////////////////////////////////////////////////////////  
 //** Fonctions pour le CheckSTDEV : vérifier l'intégrité de la LSE
-int CheckPreSTDEV(char * wuID, char *Value, char *sFrameNb, char *sAngleEmission, char *realFCParam, char *FunctionCodeValue, char *Parametertocheck);
+int CheckPreSTDEV(char * wuID, char *Value, char *sFrameNb, char *sAngleEmission, char *realFCParam, char *FunctionCodeValue, char *Parametertocheck, char *InterfacetoCheck);
 int CheckIndivSTDEV();
 int CheckNewSTDEV(char *sAngleEmission,int errorPreSTDEV,int errorIndivSTDEV); 
 ////////////////////////////////////////////////////////////////////////////////
@@ -388,9 +388,9 @@ int compareFile(FILE * fPtr1, FILE * fPtr2, int * line, int * col);
 
 struct Parameter
 {
-	char name[100];
-	char value[25];
-	char unit[50];
+	char name[200];
+	char value[100];
+	char unit[150];
 };
 
 struct Frame
@@ -415,5 +415,29 @@ int verifLabel(char *label);
 int PathSpaces(char *string);
 char* configInit(char type);
 char *configName(char* path);
+int labelAlreadyInsert(char *label);
+int labelAlreadyExists(char *label);
+char* StandardToAttribute(char *Param);
+char* DiagToAttribute(char *Param) ;
+char* SW_IndentToAttribute(char *Param)  ;
+char* DruckToAttribute(char *Param)  ; 
+char* LSEToAttribute(char *Param)  ;
+int GetALLFramesTypes();
+int CheckRFProtocol(char *InterfaceToCheck,char *RFprot);
+int findColumn(char *name);
+
+struct interfaceStruct
+{
+ char columnParam[10] ;
+ char columnAttribute[10] ; 
+ char name[80] ;
+};
+
+struct column
+{
+ char columnParam[10] ;
+ char columnAttribute[10] ; 
+};
+
 //******************************************************************************
 #endif
