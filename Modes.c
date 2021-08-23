@@ -253,6 +253,8 @@ struct column col;
 int indexInterfaceStruct = 0;
 char txtseqfile[MAX_PATHNAME_LEN] ="";
 int execonf = 0; 
+int nbParam = 0;
+char IDselect[50] ="";
 //************************************************
 
 
@@ -1401,7 +1403,12 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			SetCtrlVal(GiPopupAdd2,PANEL_ADD_LFPOWER,			"");
 			//SetCtrlVal(GiPopupAdd2,PANEL_ADD_NUMBER,			"");
 			SetCtrlVal(GiPopupAdd2,PANEL_ADD_INTERFRAME,		"");
-			SetCtrlVal(GiPopupAdd2,PANEL_ADD_WUID_VALUE,		"");
+			SetCtrlVal(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,		"");
+			SetCtrlVal(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,		""); 
+			SetCtrlVal(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,		""); 
+			SetCtrlVal(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,		""); 
+			SetCtrlVal(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,		""); 
+			SetCtrlVal(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,		""); 
 
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_CHECKCONTINUOUS,ATTR_DIMMED,1);
 
@@ -1438,9 +1445,14 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_CHECKCONTINUOUS,ATTR_DIMMED,1);
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 
 			insert_parameter=1;
 
@@ -1459,9 +1471,14 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); //AJOUT Maxime PAGES - 10/06/2020
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 
 			insert_parameter=1;
 
@@ -1478,14 +1495,26 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,				ATTR_DIMMED,0); //AJOUT Maxime PAGES - 10/06/2020
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,				ATTR_DIMMED,0);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,			ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,				ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,				ATTR_DIMMED,1);
-
-
-
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,					ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_2,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_3,				ATTR_DIMMED,1);
 			//SetCtrlVal (GiPopupAdd2, PANEL_ADD_CHECKCONTINUOUS, toggleButtonVal);
 
 			insert_parameter=1;
@@ -1503,11 +1532,16 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,					ATTR_DIMMED,0); //AJOUT Maxime PAGES - 10/06/2020
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,				ATTR_DIMMED,0);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,					ATTR_DIMMED,0); //time
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,				ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,			ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,				ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,0);
 
 
 
@@ -1528,11 +1562,16 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); //AJOUT Maxime PAGES - 10/06/2020
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 
 			insert_parameter=1;
 
@@ -1549,11 +1588,16 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); //AJOUT Maxime PAGES - 10/06/2020
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 
 			insert_parameter=1;
 
@@ -1570,11 +1614,16 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,					ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,					ATTR_DIMMED,1); //AJOUT Maxime PAGES - 10/06/2020
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,				ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,					ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,				ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,			ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 
 			insert_parameter=1;
 
@@ -1591,11 +1640,16 @@ int CVICALLBACK select_function (int panel, int control, int event,
 			//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_NUMBER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); //AJOUT Maxime PAGES - 10/06/2020
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 0);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 
 			insert_parameter=1;
 
@@ -1687,8 +1741,11 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 	int itemValue=0;
 	char labelWUID[100];
 	int indexWUID = 0;
+	
 	//char itemSelected[100] = "";
-
+	
+	char parameter[150]="";
+	int indexParam = 0;
 
 	//int itemMLF=10;
 	char Formula[500]="";
@@ -1713,6 +1770,11 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 	char function7[]="StopLFCw";
 	char function8[]="Label";  //it has time /value atm pressure
 
+	char valueBox1[100] ;
+	char valueBox2[100] ;
+	char valueBox3[100] ;
+	
+	char *parameterCell="";
 	/*char mlf[]="0";
 	char mlf1[]="MLF1";
 	char mlf2[]="MLF2";
@@ -1828,26 +1890,64 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 
 					//*****************************************
 					cell.x=6;
-					//Modif MaximePAGES 13/08/2020 -  WU ID modification
-					GetCtrlIndex(panel,PANEL_ADD_WUID, &indexWUID);
-					GetLabelFromIndex (panel,PANEL_ADD_WUID, indexWUID,labelWUID);
 					
-					if (strcmp(labelWUID,"ID ind") == 0) 
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_4,valueBox1);
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_5,valueBox2);
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_6,valueBox3);
+					
+					if ( strstr(valueBox1,"ID") != NULL )
 					{
-						SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, "");
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE,valueBox1); 	
+					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, valueBox1);		
 					}
-					else 
+					else if ( strstr(valueBox2,"ID") != NULL )
 					{
-						SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, labelWUID);	
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_2,valueBox2); 	
+					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, valueBox2);		
 					}
-						
-					//GetCtrlVal(panel,PANEL_ADD_WUID_VALUE, value_ind);
-					//SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, value_ind);
-
+					else if ( strstr(valueBox3,"ID") != NULL )
+					{
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_3,valueBox3); 	
+					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, valueBox3);		
+					}
+				
 					cell.x=7;
 					GetCtrlVal(panel,PANEL_ADD_INTERFRAME, interframe);
 					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, interframe);
 
+					cell.x=8;
+					
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE,valueBox1);
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_2,valueBox2);
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_3,valueBox3);
+					
+					if ( strcmp(valueBox2,"") != 0)
+					{
+					parameterCell=strcat(valueBox1,"|");
+					parameterCell=strcat(parameterCell,valueBox2);
+						if ( strcmp(valueBox3,"") != 0)
+						{
+						parameterCell=strcat(parameterCell,"|");
+						parameterCell=strcat(parameterCell,valueBox3);
+						}
+					SetTableCellVal(GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, parameterCell);
+					}
+					else
+					{
+					SetTableCellVal(GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, valueBox1);    	
+					}
+					
+				/*	GetCtrlIndex(panel,PANEL_ADD_PARAMETER, &indexParam);
+					GetLabelFromIndex (panel,PANEL_ADD_PARAMETER, indexParam,parameter);
+					if (  strcmp(parameter,"Select parameter") != 0)
+					{
+					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, parameter);
+					}
+					else 
+					{
+					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, "");      
+					}*/	 
+					
 					break; //final case 3
 				case 4:
 					SetTableCellVal (GiPanel, PANEL_MODE_SCRIPTS_DETAILS, cell, function4);
@@ -1876,8 +1976,8 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 
 					cell.x=6;
 					//Modif MaximePAGES 13/08/2020 -  WU ID modification
-					GetCtrlIndex(panel,PANEL_ADD_WUID, &indexWUID);
-					GetLabelFromIndex (panel,PANEL_ADD_WUID, indexWUID,labelWUID);
+					GetCtrlIndex(panel,PANEL_ADD_PARAMETER, &indexWUID);
+					GetLabelFromIndex (panel,PANEL_ADD_PARAMETER_VALUE, indexWUID,labelWUID);
 					
 					if (strcmp(labelWUID,"ID ind") == 0) 
 					{
@@ -1959,7 +2059,7 @@ int CVICALLBACK addCallback (int panel, int control, int event,
 				//	InsertListItem (GiExpectedResultsPanel,EXPRESULTS_LABEL1  , -1, labelname2, 0);
 					break;
 			}
-			cell.x=8;
+			cell.x=9;
 
 			if (delete ==0)
 			{
@@ -2955,7 +3055,7 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 						ExcelRpt_WorkbookClose (workbookHandleLoad, 0);
 						ExcelRpt_WorkbookOpen (applicationHandleProject, pathName, &workbookHandle7);
 						ExcelRpt_GetWorksheetFromIndex(workbookHandle7, 1, &worksheetHandle7);
-						ExcelRpt_GetCellValue (worksheetHandle7, "I1", CAVT_INT,&EndBoucle);
+						ExcelRpt_GetCellValue (worksheetHandle7, "J1", CAVT_INT,&EndBoucle);
 
 						*pointeurval= EndBoucle-1;
 
@@ -3005,8 +3105,13 @@ int CVICALLBACK SCRIPTS_DETAILS (int panel, int control, int event,
 							ExcelRpt_GetCellValue (worksheetHandle7,range , CAVT_CSTRING,sCellValue);
 							SetTableCellVal(panel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
 
-							cell.x =8;  //Comments
+							cell.x =8;  //Parameter
 							sprintf(range,"H%d",boucle+1);
+							ExcelRpt_GetCellValue (worksheetHandle7,range , CAVT_CSTRING,sCellValue);
+							SetTableCellVal(panel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
+							
+							cell.x =9;  //Comments
+							sprintf(range,"I%d",boucle+1);
 							ExcelRpt_GetCellValue (worksheetHandle7,range , CAVT_CSTRING,sCellValue);
 							SetTableCellVal(panel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
 
@@ -3160,11 +3265,16 @@ void modifyStep(int rowNb)
 		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_ACCELERATION,ATTR_DIMMED,0); 
 		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INSERT_PARAMETER2,ATTR_DIMMED,0);	  
 		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,ATTR_DIMMED,1);
-		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); //AJOUT Maxime PAGES - 10/06/2020
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); 
 		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
 		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 		
 	 	cell.x = 1 ;
 		GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
@@ -3189,9 +3299,21 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,				ATTR_DIMMED,0); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,				ATTR_DIMMED,0);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,					ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,			ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,				ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,					ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON,				ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_2,				ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_3,				ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,				ATTR_DIMMED,1);
 		
@@ -3211,8 +3333,10 @@ void modifyStep(int rowNb)
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_INTERFRAME,sCellValue); 
 			cell.x = 6 ;
-			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
+			/*GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_WUID,10);
+			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
+		    SetCtrlVal(panelHandle-2,PANEL_ADD_PARAMETER,10);*/
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_LFPOWER,"20"); 
 			command = 3;
 				 
@@ -3230,9 +3354,14 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 			
 			
 			cell.x = 1 ;
@@ -3259,11 +3388,16 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 			command = 6; 
 			
 			cell.x = 1 ;
@@ -3282,11 +3416,16 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,					ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,				ATTR_DIMMED,1); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,				ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,					ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,				ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,			ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,				ATTR_DIMMED,1);
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 		    command = 7;
 			
 			cell.x = 1 ;
@@ -3303,11 +3442,16 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,				ATTR_DIMMED,0); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,				ATTR_DIMMED,0);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,					ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,					ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,					ATTR_DIMMED,0); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,				ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,			ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,				ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,0);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,0); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,0);
 		
 			cell.x = 1 ;
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
@@ -3326,7 +3470,7 @@ void modifyStep(int rowNb)
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_INTERFRAME,sCellValue); 
 			cell.x = 6 ;
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
-		    SetCtrlVal(panelHandle-2,PANEL_ADD_WUID,sCellValue); 
+		    SetCtrlVal(panelHandle-2,PANEL_ADD_PARAMETER_VALUE,sCellValue); 
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
 		    SetCtrlVal(panelHandle-2,PANEL_ADD_LFPOWER,"20"); 
 			command = 4;
@@ -3342,11 +3486,16 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1); 
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 			
 			cell.x = 1 ;
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
@@ -3365,11 +3514,16 @@ void modifyStep(int rowNb)
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNAME,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LFDNBFRAME,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_INTERFRAME,ATTR_DIMMED,1);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_TIME2,ATTR_DIMMED,0);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DURATION2,ATTR_DIMMED,1);
 			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_LABEL_STRING,ATTR_DIMMED, 0);
-			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
 			
 			cell.x = 1 ;
 			GetTableCellVal(GiPanel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
@@ -4148,7 +4302,7 @@ SCRIPTS_DETAILS_2 (int panel, int control, int event,
 void couleurLigne(int numeroLigne, int GiPanel)
 {
 	Point cell;
-	cell.x=8;
+	cell.x=9;
 	cell.y=numeroLigne;
 
 	//variables for test script
@@ -4236,7 +4390,7 @@ void insert_steps(int numeroLigne, int GiPanel)
 	DisplayPanel(GiPopupAdd2);
 	SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DECORATION_2,ATTR_VISIBLE,1);
 	SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_SCRIPT_ADD,ATTR_VISIBLE,0);
-	SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_BOUTON_INSERT,ATTR_VISIBLE,1);
+//	SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_BOUTON_INSERT,ATTR_VISIBLE,1);
 
 	// Ouverture de la database et récuprération des paramètres
 	// La boucle récupère les parametres du fichier excel (dynamique)
@@ -4433,11 +4587,17 @@ void add_menu()
 
 	int endid=1;
 	int boucleid = 0;
+	int endparam=1;
+	int boucleparam = 0;
 	int parameterCompare;
 	char rangeid[30];
 	char wuid[100]="";
 	char cond_endid[100]="";
-
+	char rangeparam[30];
+	char param[100]="";
+	char cond_endparam[100]="";
+	
+	
 
 	if(iAnumLoad!= 1 && iDataBaseLoad!=1)
 	{
@@ -4454,15 +4614,16 @@ void add_menu()
 	else
 	{
 
+		
 		// Ouverture du panel
 
 		GiPopupAdd2 = LoadPanel (0, "IhmModes.uir", PANEL_ADD);   // Load Panel_add problem
 		DisplayPanel(GiPopupAdd2);
 		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DECORATION_2,ATTR_VISIBLE,1);
 		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_SCRIPT_ADD,ATTR_VISIBLE,1);
-		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_BOUTON_INSERT,ATTR_VISIBLE,0);
+		//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_BOUTON_INSERT,ATTR_VISIBLE,0);
 		
-		InsertListItem (GiPopupAdd2,PANEL_ADD_WUID,0,"",0);
+		//InsertListItem (GiPopupAdd2,PANEL_ADD_WUID,0,"",0);
 		//InsertListItem (GiPopupAdd2,PANEL_ADD_PARAMETERS,0,"",0);
 
 		//Modif MaximePAGES 06/08/2020
@@ -4471,17 +4632,40 @@ void add_menu()
 			InsertListItem (GiPopupAdd2,PANEL_ADD_PARAMETERS,row,myParameterTab[row-1].name,row);
 		}
 		
-		
 
-		 (GiPopupAdd2,PANEL_ADD_WUID,0,"ID ind",0);
-		for(boucleid=1; endid==1; boucleid++) //
+		for(boucleparam=1; endparam==1; boucleparam++) //
 		{
-
-			sprintf(rangeid,"O%d",boucleid+1);  //start with O2
-			ExcelRpt_GetCellValue (worksheetHandledata1, rangeid, CAVT_CSTRING, wuid);
+			 //laaaaa
+			int res = findColumn("WU IDs Number");
+			
+			sprintf(rangeparam,"%s%d",col.columnParam, boucleparam+1);  //start with O2
+			ExcelRpt_GetCellValue (worksheetHandledata1, rangeparam, CAVT_CSTRING, param);
 
 			//stop condition
-			parameterCompare = strcmp(wuid,cond_endid);	// compare les deux chaine de caractère
+			parameterCompare = strcmp(param,cond_endparam);	// compare les deux chaine de caractère
+
+			if(parameterCompare == 0) //when parameter is ""
+			{
+				endparam=0;
+			}
+			else
+			{
+				InsertListItem (GiPopupAdd2,PANEL_ADD_PARAMETER,boucleparam,param,boucleparam);
+			}
+		}
+
+		endparam=1;
+		
+		for(boucleparam; endid==1; boucleparam++) //
+		{
+			 //laaaaa
+			int res = findColumn("Frame Parameters");
+			
+			sprintf(rangeparam,"%s%d",col.columnParam, boucleparam+1);  //start with O2
+			ExcelRpt_GetCellValue (worksheetHandledata1, rangeparam, CAVT_CSTRING, param);
+
+			//stop condition
+			parameterCompare = strcmp(param,cond_endparam);	// compare les deux chaine de caractère
 
 			if(parameterCompare == 0) //when parameter is ""
 			{
@@ -4489,7 +4673,7 @@ void add_menu()
 			}
 			else
 			{
-				InsertListItem (GiPopupAdd2,PANEL_ADD_WUID,boucleid,wuid,boucleid);
+				InsertListItem (GiPopupAdd2,PANEL_ADD_PARAMETER,boucleparam,param,boucleparam);
 			}
 		}
 
@@ -4573,7 +4757,7 @@ void add_menu()
 }
 
 
-int CVICALLBACK wuid_fonction (int panel, int control, int event,
+/*int CVICALLBACK wuid_fonction (int panel, int control, int event,
 							   void *callbackData, int eventData1, int eventData2)
 {
 	int itemValue=10;
@@ -4581,13 +4765,14 @@ int CVICALLBACK wuid_fonction (int panel, int control, int event,
 	char valueParameter[100];
 	//char unitParameter[100];
 	char valueDefault[100]=" ";
+	int res ;
 
 	switch (event)
 	{
 		case EVENT_VAL_CHANGED:
 
-			//SetCtrlVal(panel,PANEL_ADD_WUID_VALUE,"");
-			GetCtrlVal(panel,PANEL_ADD_WUID, &itemValue);
+			res = findColumn("WU IDs Number");
+			GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE, &itemValue);
 
 			if (itemValue==0)
 			{
@@ -4595,14 +4780,14 @@ int CVICALLBACK wuid_fonction (int panel, int control, int event,
 			}
 			else
 			{
-				sprintf(range,"P%d",itemValue+1);
+				sprintf(range,"%s%d",col.columnAttribute,itemValue+1);
 				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, valueParameter); //ligne peut être réutilisable pour récupérer l'ID, faire un if ID1 =0 ID1Diag = 1 ... ID2 = 3 et utiliser cette ligne pour récupérer la valeur !
 				SetCtrlVal(panel,PANEL_ADD_WUID_VALUE,valueParameter);
 			}
 			break;
 	}
 	return 0;
-}
+}   */
 
 
 int CVICALLBACK Insert_Parameter1 (int panel, int control, int event,
@@ -4662,16 +4847,118 @@ int CVICALLBACK lfdname (int panel, int control, int event,
 	char nameMLF[100]="";
 	int boucle;
 	int wuid =0;
+	FILE* fichierAnum = NULL; 
+	char line[300] ="";
+		char lineLF[300] ="";
+		char sauv[300]="";
 
-
+	int size = 0;
+	int end = 0;
+	int pos ;
+	char *token ="";
+	char aux[50] ="";
+	int i = 0;
+	int index = 0;
+	
 	switch (event)
 	{
 		case EVENT_VAL_CHANGED:
+		
+		SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE,""); 
+		SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_2,""); 
+		SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_3,""); 
+		SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_4,""); 
+		SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_5,""); 
+		SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_6,"");
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_2,				ATTR_DIMMED,1); 
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_3,				ATTR_DIMMED,1);
+		SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,				ATTR_DIMMED,0); 
 
-			GetCtrlVal(panel,PANEL_ADD_LFDNAME, nameMLF);
-		//	printf("nameMLF = %s", nameMLF);
+		GetCtrlVal(panel,PANEL_ADD_LFDNAME, nameMLF);
+		size = strlen(nameMLF);
+		 
+		fichierAnum = fopen(GsAnumCfgFile,"rt");
+	
+		if (fichierAnum == NULL) MessagePopup ("Warning", "Impossible to open the Anum Config file"); 
+	
+		while (end == 0)
+		{
+		fgets(line,300,fichierAnum);
+		strcpy(sauv,line);
+		
+		token = strtok(line,":");
+		token = strtok(NULL, ":");
+		
+		if (token != NULL)
+		strcpy(lineLF,token) ;
+		lineLF[size]=NULL;
+		
+		if (strcmp(nameMLF,lineLF)==0)
+			{
+			token = strtok(sauv,"@");
+			token = strtok(NULL, "@");
+			
+			while (token != NULL)
+		    {
+				
+				i = 0;
+				while( token[i] != '(' )
+				{
+					aux[i]=token[i];
+					i++;
+				}
+			index++ ; 
+			
+			switch(index)
+			{	
+				case 1 :
+				SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_4,aux);
+				break;
+				
+				case 2 :
+				SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_5,aux);
+				break;
+				
+				case 3 :
+				SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_6,aux);
+				break;
+			}
+			memset(aux, 0,50 );
+			token = strtok(NULL, "@");
+			
+			}
+			nbParam = index ; 
+			
+			if (index != 0)
+			{
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,0);  
+			 	SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,0); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
+				SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON,1); 
+			}
+			else
+			{
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,ATTR_DIMMED,1);  
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);	
+			}
+				
+				
+			end = 1;	
+			}
+		}
+	
+		fclose(fichierAnum);
 
-			for(boucle=0; boucle < strlen(nameMLF); boucle++)
+		/*	for(boucle=0; boucle < strlen(nameMLF); boucle++)
 			{
 				if(nameMLF[boucle]=='I' && nameMLF[boucle+1]=='n' && nameMLF[boucle+2]=='d' )
 				{
@@ -4681,15 +4968,23 @@ int CVICALLBACK lfdname (int panel, int control, int event,
 			if(wuid==1)
 			{
 				//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DECORATION_WUID,ATTR_VISIBLE,0);
-				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED, 0);
-				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED, 0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,0); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,0); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,0); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,0); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,0);
 			}
 			else
 			{
 				//SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_DECORATION_WUID,ATTR_VISIBLE,1);
-				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID,ATTR_DIMMED, 1);
-				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_WUID_VALUE,ATTR_DIMMED, 1);
-			}
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,ATTR_DIMMED,1); 
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,ATTR_DIMMED,1);
+			} */
 
 			break;
 	}
@@ -7172,7 +7467,7 @@ int CVICALLBACK BoutonVitesse (int panel, int control, int event,
 	return 0;
 }
 
-void ExecuteAnumCmd(int cmd, char *strVal, int numVal, int param, char *ID)
+void ExecuteAnumCmd(int cmd, char *strVal, int numVal, int param, char *ID,char **paramtab)
 {
 	unsigned char cAPI;
 	char aCommand[128];
@@ -7292,8 +7587,14 @@ void ExecuteAnumCmd(int cmd, char *strVal, int numVal, int param, char *ID)
 				sAPILFRF.ByteIn1=(unsigned char)numVal;
 				sAPILFRF.ByteIn2=(unsigned char)param;
 				strcpy(sAPILFRF.StringIn1, strVal);
-				strcpy(sAPILFRF.StringIn2, ID);
+				if (paramtab[0] != NULL )
+				strcpy(sAPILFRF.StringIn2, paramtab[0]);
+				if (paramtab[1] != NULL )
+				strcpy(sAPILFRF.StringIn3, paramtab[1]);
+				if (paramtab[2] != NULL )
+				strcpy(sAPILFRF.StringIn4, paramtab[2]);
 				
+				//LAAA : Faire des ifs pour traiter les différents cas ?
 				//printf("strlen = %d\n",strlen(ID));
 				
 				cAPI=myFUnc(aCommand, (void*)&sAPILFRF);
@@ -7370,7 +7671,7 @@ int CVICALLBACK OnCheckShowAnum (int panel, int control, int event,
 			//check for tcs no
 
 			GetCtrlVal (panel, control, &isCheck);
-			ExecuteAnumCmd((int)7,"",isCheck,(int)0,"");
+			ExecuteAnumCmd((int)7,"",isCheck,(int)0,"","");
 
 			break;
 	}
@@ -7466,7 +7767,7 @@ int CVICALLBACK BoutonExecution (int panel, int control, int event,
 				SetMenuBarAttribute (GetPanelMenuBar (GiPanel), CONFIG_CONFIG_ITEM_LOAD_DATABASE, 	ATTR_DIMMED, 	1);
 				SetMenuBarAttribute (GetPanelMenuBar (GiPanel), CONFIG_CONFIG_ITEM_SET_LOG_DIR, 	ATTR_DIMMED, 	1);   */
 
-				ExecuteAnumCmd(dSTOP,"",0,0,"");
+				ExecuteAnumCmd(dSTOP,"",0,0,"","");
 
 				SetGiStartCycleRun(0);
 				SetGiStartCycleVitesse(0);
@@ -7484,7 +7785,7 @@ int CVICALLBACK BoutonExecution (int panel, int control, int event,
 
 			//Load Anum .cfg
 			//ExecuteAnumCmd(6,"Bla",0,0);
-			ExecuteAnumCmd((int)6,strVal,(int)0,(int)0,"");
+			ExecuteAnumCmd((int)6,strVal,(int)0,(int)0,"","");
 			//check for tcs no
 			GetNumTableRows(GiPanel, PANEL_MODE_TABLE_SCRIPT,&rowNo); //Nb rows = nb of tests script
 
@@ -7561,7 +7862,6 @@ int CVICALLBACK BoutonExecution (int panel, int control, int event,
 				SetCtrlAttribute (GiPanel,PANEL_MODE_MODE_CREATION, ATTR_DIMMED, 0);
 				SetCtrlAttribute(GiPanel, PANEL_MODE_MODE_ANALYSE, ATTR_DIMMED,0);
 				SetCtrlAttribute (GiPanel, PANEL_MODE_BUT_START_RUN, ATTR_LABEL_TEXT, "Stop");
-				execonf = 0;
 				SetGiStartCycleRun(1);
 
 			}
@@ -8601,17 +8901,34 @@ void ProcessAnumCmd(int index)   //this function is called when there is a coman
 	unsigned int NumVal;
 	char *StrVal;
 	char *ID;
-	//char *StorageFolder;
+	char *parameter;
+	char *paramFrame;
+	//char *StorageFolder; 
 	unsigned int Param;
+	char *token;
+	int i =0;
+	char *param[5]={NULL};
 
 	WuAutoCheck_LFComand__Get__Command(TabAnumCmd[index],&Command,&exception);
 	WuAutoCheck_LFComand__Get__StrVal(TabAnumCmd[index],&StrVal,&exception);
 	WuAutoCheck_LFComand__Get__NumVal(TabAnumCmd[index],&NumVal,&exception);
 	WuAutoCheck_LFComand__Get__Param(TabAnumCmd[index],&Param,&exception);
 	WuAutoCheck_LFComand__Get__ID(TabAnumCmd[index],&ID,&exception);
+	WuAutoCheck_LFComand__Get__ParamFrame(TabAnumCmd[index],&paramFrame,&exception);   
 
+	token = strtok(paramFrame,"|");
+	while (token != NULL)
+	    {
+		param[i]=token;
+		token = strtok(NULL, "|");
+		i++;
+		}
+		for (int y = 0 ; y<i-1;y++)
+		{
+		strcat(param[y],"h");	
+		}
 //	printf("Command = _%d_ and StrVal = _%s_ and NumVal = _%d_ and Param = _%d_ and ID = _%s_\n",Command,StrVal,NumVal,Param,ID); 
-	ExecuteAnumCmd(Command,StrVal,NumVal,Param,ID); //command anum
+	ExecuteAnumCmd(Command,StrVal,NumVal,Param,ID,param); //command anum
 	//ExecuteAnumCmd(7,"",0,0,"");       
 }
 
@@ -8649,7 +8966,7 @@ static int CVICALLBACK ThreadCycleAnum (void *functionData)
 						if(Time<actTime)
 						{
 							ProcessAnumCmd(i);
-
+							//laaa tester recup valeur param ?
 							cell.y = 1;
 							cell.x = 2;
 							i++;
@@ -8745,7 +9062,7 @@ void ShowTotalTimeAndTranslateScripts(int panel, int rowNo)
 			//system("cmd.exe /c TASKLIST /FI \"imagename eq EXCEL.EXE\" /nh /fo csv   >> C:\\Users\\uic80920\\Desktop\\myoutput.txt"); //MODIF MaximePAGES 18/06/2020
 			ExcelRpt_WorkbookOpen (applicationHandleProject, exeTestXls2, &workbookHandleSeq);
 			ExcelRpt_GetWorksheetFromIndex(workbookHandleSeq, 1, &worksheetHandleSeq);
-			ExcelRpt_GetCellValue (worksheetHandleSeq, "I1", CAVT_INT,&EndBoucle); //EndBoucle = Number of lines in the script
+			ExcelRpt_GetCellValue (worksheetHandleSeq, "J1", CAVT_INT,&EndBoucle); //EndBoucle = Number of lines in the script
 
 			for(boucle=1; boucle <= EndBoucle-1; boucle++)
 			{
@@ -8812,7 +9129,7 @@ void ShowCurrentScript(int panel, char *pathCurrentScript)
 	//system("cmd.exe /c TASKLIST /FI \"imagename eq EXCEL.EXE\" /nh /fo csv  >> C:\\Users\\uic80920\\Desktop\\myoutput.txt"); //MODIF MaximePAGES 18/06/2020
 	ExcelRpt_WorkbookOpen (applicationHandleProject, pathCurrentScript, &workbookHandleCurrentScript);
 	ExcelRpt_GetWorksheetFromIndex(workbookHandleCurrentScript, 1, &worksheetHandleCurrentScript);
-	ExcelRpt_GetCellValue (worksheetHandleCurrentScript, "I1", CAVT_INT, &EndBoucle); //EndBoucle = Number of lines in the script
+	ExcelRpt_GetCellValue (worksheetHandleCurrentScript, "J1", CAVT_INT, &EndBoucle); //EndBoucle = Number of lines in the script
 
 	for(boucle=1; boucle <= EndBoucle-1; boucle++)
 	{
@@ -13664,7 +13981,7 @@ void openingExpectedResults(char *testScriptFile, char *sProjectDir, char * sDir
 
 		//Take time from "TestCase" (workbookHandle4 - worksheetHandle3)
 		ExcelRpt_GetWorksheetFromIndex(workbookHandle4, 1, &worksheetHandle3);
-		ExcelRpt_GetCellValue (worksheetHandle3, "I1", CAVT_INT,&EndBoucleTS); //EndBoucleTS - end boucle TestScript
+		ExcelRpt_GetCellValue (worksheetHandle3, "J1", CAVT_INT,&EndBoucleTS); //EndBoucleTS - end boucle TestScript
 
 		//MODIF MaximePAGES 29/06/2020 E200
 		//if (oneloop == 1) {  // we want to initialized the tab just one time
@@ -14360,7 +14677,7 @@ static int CVICALLBACK ThreadCycleRun (void *functionData)
 							LoadTest(exeTestCsv,GiPanel);
 
 							//start Anum
-							ExecuteAnumCmd(dRUN,"",0,0,"");
+							ExecuteAnumCmd(dRUN,"",0,0,"","");
 							SetGiStartCycleAnum(lfCmdNo);
 
 							//this button is enabled when anum is executing
@@ -14388,7 +14705,7 @@ static int CVICALLBACK ThreadCycleRun (void *functionData)
 								ProcessSystemEvents();
 							}
 							//stop anum
-							ExecuteAnumCmd(dSTOP,"",0,0,"");
+							ExecuteAnumCmd(dSTOP,"",0,0,"","");
 
 							//Modif MaximePAGES 1/07/2020 - Script Progress Bar E402 **
 							ProgressBar_End(GiPanel,PANEL_MODE_PROGRESSBAR,0,"Script Progress Bar:");
@@ -17378,6 +17695,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 	char range2[30];
 	char range3[30];
 	int cont = 0;
+	int res ; 
 	
 	
 	errDir = GetProjectDir(sProjectDir);
@@ -17498,10 +17816,11 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 				//Modif MaximePAGES 13/08/2020 - new IHM for WU ID
 				for(int i=2; end==1; i++)
 				{
-					sprintf(range,"O%d",i);
+					res = findColumn("WU IDs Number");
+					sprintf(range,"%s%d",col.columnParam, i);
 					ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, WUIDname);
 
-					if (strcmp(WUIDname, "") == 0)
+					if (strcmp(WUIDname, "") == 0 )
 					{
 						end=0;  //the end was found
 					}
@@ -17509,7 +17828,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 					{
 						if (strcmp(WUIDname, "ID1") == 0)
 						{
-							sprintf(range,"P%d",i);
+							sprintf(range,"%s%d",col.columnAttribute,i);
 							ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, WUIDvalue);
 							SetCtrlVal(panel,PANEL_MODE_WUIDSTAND1,WUIDvalue);
 							
@@ -17520,7 +17839,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 						
 						if (strcmp(WUIDname, "IDDiag1") == 0)
 						{
-							sprintf(range,"P%d",i);
+							sprintf(range,"%s%d",col.columnAttribute,i);
 							ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, WUIDvalue);
 							SetCtrlVal(panel,PANEL_MODE_WUIDDIAG1,WUIDvalue);
 							
@@ -17531,7 +17850,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 						
 						if (strcmp(WUIDname, "IDSWIdent1") == 0)
 						{
-							sprintf(range,"P%d",i);
+							sprintf(range,"%s%d",col.columnAttribute,i);
 							ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, WUIDvalue);
 							//SetCtrlVal(panel,PANEL_MODE_WUIDDIAG1,WUIDvalue);
 							
@@ -17543,7 +17862,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 						
 						if (strcmp(WUIDname, "ID2") == 0)
 						{
-							sprintf(range,"P%d",i);
+							sprintf(range,"%s%d",col.columnAttribute,i);
 							ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, WUIDvalue);
 							SetCtrlVal(panel,PANEL_MODE_WUIDSTAND2,WUIDvalue);
 							
@@ -17554,7 +17873,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 						
 						if (strcmp(WUIDname, "IDDiag2") == 0)
 						{
-							sprintf(range,"P%d",i);
+							sprintf(range,"%s%d",col.columnAttribute,i);
 							ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, WUIDvalue);
 							SetCtrlVal(panel,PANEL_MODE_WUIDDIAG2,WUIDvalue);
 							
@@ -17565,7 +17884,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 						
 						if (strcmp(WUIDname, "IDSWIdent2") == 0)
 						{
-							sprintf(range,"P%d",i);
+							sprintf(range,"%s%d",col.columnAttribute,i);
 							ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, WUIDvalue);
 						//	SetCtrlVal(panel,PANEL_MODE_WUIDDIAG1,WUIDvalue);
 							
@@ -17582,7 +17901,9 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 				end =1;
 
 				//Get IF and IB threshold value from DataBase
-				ExcelRpt_GetCellValue (worksheetHandledata1, "N2", CAVT_CSTRING, sIFandIBthreshold);
+				res = findColumn("Param Number");
+				sprintf(range,"%s2",col.columnAttribute);
+				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, sIFandIBthreshold);
 				IFandIBthreshold = atoi(sIFandIBthreshold);
 
 				
@@ -17590,6 +17911,7 @@ int CVICALLBACK InitConfig (int panel, int control, int event,
 				//we save all parameters (name, value, unit) inside a tab
 				for(int row=2; end==1; row++)
 				{
+					
 					sprintf(range,"A%d",row);
 					ExcelRpt_GetCellValue (worksheetHandledata2, range, CAVT_CSTRING, parameterName);
 
@@ -18436,7 +18758,7 @@ int CVICALLBACK exp_results (int panel, int control, int event,
 						ExcelRpt_WorkbookClose (workbookHandleLoad, 0);
 						ExcelRpt_WorkbookOpen (applicationHandleProject, pathName, &workbookHandle7);
 						ExcelRpt_GetWorksheetFromIndex(workbookHandle7, 1, &worksheetHandle7);
-						ExcelRpt_GetCellValue (worksheetHandle7, "I1", CAVT_INT,&EndBoucle);
+						ExcelRpt_GetCellValue (worksheetHandle7, "J1", CAVT_INT,&EndBoucle);
 
 						*pointeurval= EndBoucle-1;
 
@@ -21659,11 +21981,13 @@ int CVICALLBACK wuid_fonction_exp (int panel, int control, int event,
 	char valueParameter[100];
 	//char unitParameter[100];
 	char valueDefault[100]=" ";
-
+	int res ;
+	
 	switch (event)
 	{
 		case EVENT_VAL_CHANGED:
 
+			res = findColumn("WU IDs Number");
 			//SetCtrlVal(panel,PANEL_ADD_WUID_VALUE,"");
 			GetCtrlVal(panel,EXPRESULTS_WUIDEXP, &itemValue);
 
@@ -21673,7 +21997,7 @@ int CVICALLBACK wuid_fonction_exp (int panel, int control, int event,
 			}
 			else
 			{
-				sprintf(range,"P%d",itemValue+1);
+				sprintf(range,"%s%d",col.columnAttribute,itemValue+1);
 				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, valueParameter);
 				SetCtrlVal(panel,EXPRESULTS_WUID_VALUE,valueParameter);
 			}
@@ -22792,10 +23116,10 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 						//ExcelRpt_ApplicationQuit (applicationHandle);
 
 						// Esthétique excel
-						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A1:H1", ER_CR_ATTR_FONT_BOLD, 1);
-						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A1:H1", ER_CR_ATTR_BGCOLOR, 0xC0C0C0L);
-						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A1:H1", ER_CR_ATTR_HORIZ_ALIGN, ExRConst_HAlignCenter);
-						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A2:H100", ER_CR_ATTR_HORIZ_ALIGN, ExRConst_HAlignCenter);
+						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A1:I1", ER_CR_ATTR_FONT_BOLD, 1);
+						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A1:I1", ER_CR_ATTR_BGCOLOR, 0xC0C0C0L);
+						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A1:I1", ER_CR_ATTR_HORIZ_ALIGN, ExRConst_HAlignCenter);
+						ExcelRpt_SetCellRangeAttribute (worksheetHandlesave1, "A2:I100", ER_CR_ATTR_HORIZ_ALIGN, ExRConst_HAlignCenter);
 
 						ExcelRpt_RangeBorder (worksheetHandlesave1, "A1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
 						ExcelRpt_RangeBorder (worksheetHandlesave1, "B1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
@@ -22804,7 +23128,8 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 						ExcelRpt_RangeBorder (worksheetHandlesave1, "E1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
 						ExcelRpt_RangeBorder (worksheetHandlesave1, "F1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
 						ExcelRpt_RangeBorder (worksheetHandlesave1, "G1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
-						ExcelRpt_RangeBorder (worksheetHandlesave1, "H1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
+						ExcelRpt_RangeBorder (worksheetHandlesave1, "H1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight); 
+						ExcelRpt_RangeBorder (worksheetHandlesave1, "I1", 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
 
 						// Nom de la première ligne excel
 						ExcelRpt_SetCellValue (worksheetHandlesave1,"A1" , CAVT_CSTRING,"Time");
@@ -22814,11 +23139,12 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 						ExcelRpt_SetCellValue (worksheetHandlesave1,"E1" , CAVT_CSTRING,"Nb Frame");
 						ExcelRpt_SetCellValue (worksheetHandlesave1,"F1" , CAVT_CSTRING,"WU ID");
 						ExcelRpt_SetCellValue (worksheetHandlesave1,"G1" , CAVT_CSTRING,"Interframe");
-						ExcelRpt_SetCellValue (worksheetHandlesave1,"H1" , CAVT_CSTRING,"Comment");
+						ExcelRpt_SetCellValue (worksheetHandlesave1,"H1" , CAVT_CSTRING,"Parameter"); 
+						ExcelRpt_SetCellValue (worksheetHandlesave1,"I1" , CAVT_CSTRING,"Comment");
 
 						//Nb lignes
-						ExcelRpt_SetCellValue (worksheetHandlesave1,"J1" , CAVT_CSTRING,"(nb of rows)");
-						ExcelRpt_SetCellValue (worksheetHandlesave1,"I1" , CAVT_INT,*pointeurval+1);
+						ExcelRpt_SetCellValue (worksheetHandlesave1,"K1" , CAVT_CSTRING,"(nb of rows)");
+						ExcelRpt_SetCellValue (worksheetHandlesave1,"J1" , CAVT_INT,*pointeurval+1);
 
 						// Enregistrement sur le tableau excel par ligne
 						for( boucle1 =1; boucle1 <= *pointeurval; boucle1++)
@@ -22892,6 +23218,12 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 							ExcelRpt_SetCellValue (worksheetHandlesave1,range , CAVT_CSTRING,sCellValue);
 							ExcelRpt_RangeBorder (worksheetHandlesave1, range, 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
 
+							cell.x =9;
+							sprintf(range,"I%d",boucle1+1);
+							GetTableCellVal(panel,PANEL_MODE_SCRIPTS_DETAILS,cell, sCellValue);
+							ExcelRpt_SetCellValue (worksheetHandlesave1,range , CAVT_CSTRING,sCellValue);
+							ExcelRpt_RangeBorder (worksheetHandlesave1, range, 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
+
 							// Couleur  en fonction des comments
 							sPre=strchr(sCellValue,'e');
 							sScript=strchr(sCellValue,'i');
@@ -22932,8 +23264,8 @@ int CVICALLBACK savefilesbutton (int panel, int control, int event,
 						ExcelRpt_RangeBorder (worksheetHandlesave1, range, 1, 0x000000L , ExRConst_Medium, ExRConst_EdgeTop | ExRConst_EdgeBottom | ExRConst_EdgeLeft | ExRConst_EdgeRight);
 
 						//we save the (int)endtimeplus in a separate cell
-						ExcelRpt_SetCellValue (worksheetHandlesave1,"J2" , CAVT_CSTRING,"(time to add)");
-						ExcelRpt_SetCellValue (worksheetHandlesave1,"I2" , CAVT_INT,(int)endtimeplus);
+						ExcelRpt_SetCellValue (worksheetHandlesave1,"K2" , CAVT_CSTRING,"(time to add)");
+						ExcelRpt_SetCellValue (worksheetHandlesave1,"J2" , CAVT_INT,(int)endtimeplus);
 						//******************************************************
 
 
@@ -25112,7 +25444,12 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 	char wuIDvalue[100] = "";
 	char WUIDnameFromDatabase[100]; 
 	int end=1;
-
+	
+	char ParamName[100] = ""; 
+	char ParamValue[100] = "";
+	char ParamNameFromDatabase[100]; 
+	int endParam=1;
+	char rangeParam[30];
 
 
 
@@ -25143,14 +25480,14 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 	int nbOfRow_TestCase = 0;
 	int nbOfRow_ExpResult= 0;
 	char chaineValue[100] = "";
-
+	int res ;
 
 	ExcelRpt_WorkbookOpen (applicationHandleProject,excelScript, &workbookHandle10);
 
 	// worksheet n°1 - TestCase
 	ExcelRpt_GetWorksheetFromIndex(workbookHandle10, 1, &worksheetHandle10_1);
-	ExcelRpt_GetCellValue (worksheetHandle10_1, "I1", CAVT_INT, &nbOfRow_TestCase);
-	ExcelRpt_GetCellValue (worksheetHandle10_1, "I2", CAVT_INT, &endtimeplus);
+	ExcelRpt_GetCellValue (worksheetHandle10_1, "J1", CAVT_INT, &nbOfRow_TestCase);
+	ExcelRpt_GetCellValue (worksheetHandle10_1, "J2", CAVT_INT, &endtimeplus);
 
 
 	for (int row = 2 ; row <= nbOfRow_TestCase ; row++)
@@ -25170,16 +25507,19 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 		sprintf(sDuration,"%s",parameterToValue_Str(sDuration));
 		ExcelRpt_SetCellValue (worksheetHandle10_1, range, CAVT_CSTRING, sDuration);
 
+	
 		
 		//WU ID COLUMN ** Modif MaximePAGES 13/08/2020 -  WU ID translation
 		sprintf(range,"F%d",row);
 		ExcelRpt_GetCellValue (worksheetHandle10_1, range, CAVT_CSTRING, wuIDname);
 
+/*	res = findColumn("WU IDs Number");    
+		
 		if (strcmp(wuIDname, "") != 0)
 		{
 			for(int i=2; end==1; i++)
 			{
-				sprintf(rangewuid,"O%d",i);		//laaa coder en dur !!!
+				sprintf(rangewuid,"%s%d",col.columnParam,i);		//laaa coder en dur !!!
 				ExcelRpt_GetCellValue (worksheetHandledata1, rangewuid, CAVT_CSTRING, WUIDnameFromDatabase);
 
 				if (strcmp(WUIDnameFromDatabase, "") == 0)
@@ -25190,7 +25530,7 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 				{
 					if (strcmp(wuIDname, WUIDnameFromDatabase) == 0)
 					{
-						sprintf(rangewuid,"P%d",i);
+						sprintf(rangewuid,"%s%d",col.columnAttribute,i);
 						ExcelRpt_GetCellValue (worksheetHandledata1, rangewuid, CAVT_CSTRING, wuIDvalue);
 						end =0;
 					}
@@ -25203,12 +25543,55 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 		}
 		else 
 		{
-			strcpy(wuIDvalue,"");	
-		}	
+			strcpy(wuIDvalue,"");									
+		}*/	
 
-		ExcelRpt_SetCellValue (worksheetHandle10_1, range, CAVT_CSTRING, wuIDvalue);
+		ExcelRpt_SetCellValue (worksheetHandle10_1, range, CAVT_CSTRING, wuIDname);
 
 		end = 1;
+		
+		
+		
+		//Parameter ** Modif MarvynPANNETIER 20/08/2021 -  Parameter translation
+		sprintf(range,"H%d",row);
+		ExcelRpt_GetCellValue (worksheetHandle10_1, range, CAVT_CSTRING, ParamName);
+
+	/*	res = findColumn("Frame parameters");    
+		
+		if (strcmp(ParamName, "") != 0)
+		{
+			for(int i=2; end==1; i++)
+			{
+				sprintf(rangeParam,"%s%d",col.columnParam,i);		//laaa coder en dur !!!
+				ExcelRpt_GetCellValue (worksheetHandledata1, rangeParam, CAVT_CSTRING, ParamNameFromDatabase);
+
+				if (strcmp(ParamNameFromDatabase, "") == 0)
+				{
+					end=0;  //the end was found
+				}
+				else
+				{
+					if (strcmp(ParamName, ParamNameFromDatabase) == 0)
+					{
+						sprintf(rangeParam,"%s%d",col.columnAttribute,i);
+						ExcelRpt_GetCellValue (worksheetHandledata1, rangeParam, CAVT_CSTRING, ParamValue);
+						end =0;
+					}
+					else 
+					{
+						strcpy(ParamValue,"");	
+					}
+				}
+			}
+		}
+		else 
+		{
+			strcpy(ParamValue,"");									
+		}*/	
+
+		ExcelRpt_SetCellValue (worksheetHandle10_1, range, CAVT_CSTRING, ParamName);
+
+		endParam = 1;
 
 
 		iTime = atoi(sTime);
@@ -25232,7 +25615,7 @@ void translateScriptExcel (char * excelScript, char * newExcelScript)
 
 	// worksheet n°2 - ExpectedResults
 	ExcelRpt_GetWorksheetFromIndex(workbookHandle10, 2, &worksheetHandle10_2);
-	ExcelRpt_GetCellValue (worksheetHandle10_2, "I1", CAVT_INT, &nbOfRow_ExpResult);
+	ExcelRpt_GetCellValue (worksheetHandle10_2, "J1", CAVT_INT, &nbOfRow_ExpResult);
 
 	for (int row2 = 2 ; row2 <= nbOfRow_ExpResult ; row2++)
 	{
@@ -27061,7 +27444,7 @@ int CheckRFProtocol(char *InterfaceToCheck,char *RFprot)
 
 int findColumn(char *name)
 {
-	char Alphabet[30][30]={"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ"}; 
+	char Alphabet[30][50]={"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ"}; 
 	int i = 0;
 	char range[20] ;
 	char attName[100];
@@ -27093,4 +27476,216 @@ int findColumn(char *name)
 	return 0;	
 	
 	
+}
+
+
+int CVICALLBACK parameterValue (int panel, int control, int event,
+							   void *callbackData, int eventData1, int eventData2)
+{
+	int itemValue=10;
+	char range[30];
+	char valueParameter[100];
+	//char unitParameter[100];
+	char valueDefault[100]="";
+	int res ;
+	char valueBox[100] ;
+	char valueBox2[100] ;
+	int valueButton ;
+	int valueButton2 ;
+	int valueButton3 ;
+	char nameParam[50];
+	
+	switch (event)
+	{
+		case EVENT_VAL_CHANGED:
+
+			res = findColumn("Frame parameters");
+			GetCtrlVal(panel,PANEL_ADD_PARAMETER, &itemValue);
+			GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_4,valueBox);
+			GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_5,valueBox2);
+			GetCtrlVal(panel,PANEL_ADD_RADIOBUTTON,&valueButton);
+			GetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_2,&valueButton2);
+			GetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_3,&valueButton3);
+			if (itemValue==0)
+			{
+				SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE,valueDefault);
+			}
+			else
+			{
+				if (valueButton == 1 )
+				{
+				sprintf(range,"%s%d",col.columnAttribute,itemValue+1);
+				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, valueParameter); //ligne peut être réutilisable pour récupérer l'ID, faire un if ID1 =0 ID1Diag = 1 ... ID2 = 3 et utiliser cette ligne pour récupérer la valeur !
+				SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE,valueParameter);
+				SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON,0);
+				SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_2,1);
+				
+				GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_5,nameParam);
+				
+					if (strcmp(nameParam,"") != 0)
+					{
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,1);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,0);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,1);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,1);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,0);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,				ATTR_DIMMED,1);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON,				ATTR_DIMMED,0);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_2,				ATTR_DIMMED,0);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_3,				ATTR_DIMMED,1);
+					}
+					else 
+					{
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,1);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,1);
+						SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON,				ATTR_DIMMED,0);
+					}
+					if ( nbParam == 1 )
+					{
+					SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,				ATTR_DIMMED,1);	
+					}
+					
+					GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_4,nameParam);
+					
+					if (strstr(nameParam,"ID") != NULL)
+					{
+						strcpy(IDselect,valueParameter);	
+					}
+				
+				}
+				else if (valueButton2 == 1)    
+				{
+				sprintf(range,"%s%d",col.columnAttribute,itemValue+1);
+				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, valueParameter); //ligne peut être réutilisable pour récupérer l'ID, faire un if ID1 =0 ID1Diag = 1 ... ID2 = 3 et utiliser cette ligne pour récupérer la valeur !
+				SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_2,valueParameter);
+				SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_2,0);
+				SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_3,1);
+				
+				
+				GetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_6,nameParam);
+				
+				if (strcmp(nameParam,"") != 0)
+				{
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,				ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON,				ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_2,				ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_3,				ATTR_DIMMED,0);
+				}
+				else
+				{
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_2,				ATTR_DIMMED,0);	
+				}
+					if ( nbParam == 2 )
+					{
+					SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,				ATTR_DIMMED,1);	
+					}
+				
+				}
+				else if (valueButton3 == 1)    
+				{
+				sprintf(range,"%s%d",col.columnAttribute,itemValue+1);
+				ExcelRpt_GetCellValue (worksheetHandledata1, range, CAVT_CSTRING, valueParameter); //ligne peut être réutilisable pour récupérer l'ID, faire un if ID1 =0 ID1Diag = 1 ... ID2 = 3 et utiliser cette ligne pour récupérer la valeur !
+				SetCtrlVal(panel,PANEL_ADD_PARAMETER_VALUE_3,valueParameter);
+				SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_2,0);
+				SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_3,0);
+				
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,				ATTR_DIMMED,1);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON,				ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_2,				ATTR_DIMMED,0);
+				SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_RADIOBUTTON_3,				ATTR_DIMMED,0);
+				}
+			}
+			break;
+	}
+	return 0;
+}
+
+
+int CVICALLBACK RadioButton (int panel, int control, int event,
+						 void *callbackData, int eventData1, int eventData2)
+{
+	int valueZero = 0;
+	int valueOne = 1;
+
+	switch (event)
+	{
+		case EVENT_COMMIT:
+
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON,valueOne);
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_2,valueZero);
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_3,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,				ATTR_DIMMED,0);	
+			
+		break;
+	}
+	return 0;
+}
+
+
+int CVICALLBACK RadioButton2 (int panel, int control, int event,
+						 void *callbackData, int eventData1, int eventData2)
+{
+	int valueZero = 0;
+	int valueOne = 1;
+
+	switch (event)
+	{
+		case EVENT_COMMIT:
+
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON,valueZero);
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_2,valueOne);
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_3,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,				ATTR_DIMMED,0);
+		break;
+	}
+	return 0;
+}
+
+int CVICALLBACK RadioButton3 (int panel, int control, int event,
+						 void *callbackData, int eventData1, int eventData2)
+{
+	int valueZero = 0;
+	int valueOne = 1;
+
+	switch (event)
+	{
+		case EVENT_COMMIT:
+
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON,valueZero);
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_2,valueZero);
+			SetCtrlVal(panel,PANEL_ADD_RADIOBUTTON_3,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_2,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_3,				ATTR_DIMMED,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_4,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_5,				ATTR_DIMMED,valueOne);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER_VALUE_6,				ATTR_DIMMED,valueZero);
+			SetCtrlAttribute(GiPopupAdd2,PANEL_ADD_PARAMETER,				ATTR_DIMMED,0);
+		break;
+	}
+	return 0;
 }
